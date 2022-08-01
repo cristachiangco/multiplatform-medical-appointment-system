@@ -79,14 +79,14 @@ if ($showButton) {
 
     $html .= '<a class="el-betterdocs-cg-button" href="' . $term_permalink . '">';
 
-    if ($buttonIconPosition === 'before') {
+    if ($showButtonIcon && $buttonIconPosition === 'before') {
 
         $html .= '<i class="' . $buttonIcon . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-left"></i>';
     }
 
     $html .= $buttonText;
 
-    if ($buttonIconPosition === 'after') {
+    if ($showButtonIcon && $buttonIconPosition === 'after') {
 
         $html .= '<i class="' . $buttonIcon . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-right"></i>';
     }

@@ -55,7 +55,7 @@ $term = get_term_by('slug', $wp_query->query['doc_category'], 'doc_category');
 
 				echo '<div class="docs-cat-title">';
 					echo wp_sprintf('<'.BetterDocs_Helper::html_tag($output['betterdocs_archive_title_tag']).' class="docs-cat-heading">%s </'.BetterDocs_Helper::html_tag($output['betterdocs_sidebar_title_tag']).'>', $term->name);
-					echo wp_sprintf('<p>%s </p>', wpautop($term->description));
+					echo wp_sprintf('<p>%s</p>', esc_attr( $term->description ) );
 				echo '</div>
 				<div class="docs-list">';
 					$multikb = apply_filters('betterdocs_cat_template_multikb', false);

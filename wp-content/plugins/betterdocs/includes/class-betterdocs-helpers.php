@@ -569,4 +569,101 @@ class BetterDocs_Helper
         }
         return $permalink;
     }
+
+    public static function search_insert($search_input, $input_not_found)
+    {
+        global $wpdb;
+        $search = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT *
+                FROM {$wpdb->prefix}betterdocs_search_keyword 
+                WHERE keyword = %s",
+                $search_input
+            )
+        );
+
+        if (!empty($search)) {
+            $search_log = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT *
+                    FROM {$wpdb->prefix}betterdocs_search_log
+                    WHERE created_at = %s AND keyword_id = %d",
+                    date('Y-m-d'), $search[0]->id
+                )
+            );
+
+            if ( !empty($search_log) ) {
+                if (!empty($input_not_found)) {
+                    $tbl_field = 'not_found_count';
+                    $count = $search_log[0]->not_found_count + 1;
+                } else {
+                    $tbl_field = 'count';
+                    $count = $search_log[0]->count + 1;
+                }
+                $wpdb->query(
+                    $wpdb->prepare(
+                        "UPDATE {$wpdb->prefix}betterdocs_search_log
+                        SET ".$tbl_field." = ".$count."
+                        WHERE created_at = %s AND keyword_id = %d",
+                        $search_log[0]->created_at, $search_log[0]->keyword_id
+                    )
+                );
+            } else {
+                if (!empty($input_not_found)) {
+                    $count = 0;
+                    $not_found_count = 1;
+                } else {
+                    $count = 1;
+                    $not_found_count = 0;
+                }
+                $wpdb->query(
+                    $wpdb->prepare(
+                        "INSERT INTO {$wpdb->prefix}betterdocs_search_log 
+                        ( keyword_id, count, not_found_count, created_at  )
+                        VALUES ( %d, %d, %d, %s )",
+                        array(
+                            $search[0]->id,
+                            $count,
+                            $not_found_count,
+                            date('Y-m-d')
+                        )
+                    )
+                );
+            }
+        } else {
+            $insert = $wpdb->query(
+                $wpdb->prepare(
+                    "INSERT INTO {$wpdb->prefix}betterdocs_search_keyword 
+                    ( keyword )
+                    VALUES ( %s )",
+                    array(
+                        $search_input
+                    )
+                )
+            );
+
+            if ($insert) {
+                if (!empty($input_not_found)) {
+                    $count = 0;
+                    $not_found_count = 1;
+                } else {
+                    $count = 1;
+                    $not_found_count = 0;
+                }
+                $wpdb->query(
+                    $wpdb->prepare(
+                        "INSERT INTO {$wpdb->prefix}betterdocs_search_log 
+                        ( keyword_id, count, not_found_count, created_at )
+                        VALUES ( %d, %d, %d, %s )",
+                        array(
+                            $wpdb->insert_id,
+                            $count,
+                            $not_found_count,
+                            date('Y-m-d')
+                        )
+                    )
+                );
+            }
+        }
+    }
 }

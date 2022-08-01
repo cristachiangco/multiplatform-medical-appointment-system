@@ -815,7 +815,7 @@ function betterdocs_customize_css() {
                 background-size: <?php echo $output['betterdocs_live_search_background_size'] ?>;
             <?php } ?>
 		}
-		.betterdocs-search-heading h2 {
+		.betterdocs-search-heading h2.heading, .betterdocs-search-heading h1.heading, .betterdocs-search-heading h3.heading, .betterdocs-search-heading h4.heading, .betterdocs-search-heading h5.heading, .betterdocs-search-heading h6.heading {
 			line-height: 1.2;
 			font-size: <?php echo $output['betterdocs_live_search_heading_font_size'] ?>px;
 			color: <?php echo $output['betterdocs_live_search_heading_font_color'] ?>;
@@ -824,7 +824,7 @@ function betterdocs_customize_css() {
 			margin-bottom: <?php echo $output['betterdocs_search_heading_margin_bottom'] ?>px;
 			margin-left: <?php echo $output['betterdocs_search_heading_margin_left'] ?>px;
 		}
-		.betterdocs-search-heading h3 {
+		.betterdocs-search-heading h3.subheading, .betterdocs-search-heading h2.subheading, .betterdocs-search-heading h1.subheading, .betterdocs-search-heading h4.subheading, .betterdocs-search-heading h5.subheading, .betterdocs-search-heading h6.subheading {
 			line-height: 1.2;
 			font-size: <?php echo $output['betterdocs_live_search_subheading_font_size'] ?>px;
 			color: <?php echo $output['betterdocs_live_search_subheading_font_color'] ?>;

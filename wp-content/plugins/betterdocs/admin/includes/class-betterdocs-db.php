@@ -42,6 +42,7 @@ class BetterDocs_DB {
             'toc_title' => esc_html__('Table of Contents', 'betterdocs'),
             'toc_hierarchy' => 1,
             'toc_list_number' => 1,
+            'toc_dynamic_title' => 0,
             'enable_sticky_toc' => 1,
             'sticky_toc_offset' => 100,
             'collapsible_toc_mobile' => '',
