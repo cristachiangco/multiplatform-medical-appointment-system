@@ -243,6 +243,8 @@
 				customizer_conditional_setting_return_toggle(setting,'betterdocs_search_subheading_margin_right',true);
 				customizer_conditional_setting_return_toggle(setting,'betterdocs_search_subheading_margin_bottom',true);
 				customizer_conditional_setting_return_toggle(setting,'betterdocs_search_subheading_margin_left',true);
+				customizer_conditional_setting_return_toggle(setting,'betterdocs_live_search_heading_tag', true);
+				customizer_conditional_setting_return_toggle(setting,'betterdocs_live_search_subheading_tag', true);
 			});
 			wp.customize('betterdocs_live_search_custom_background_switch', function(setting){
 				customizer_conditional_setting_return_toggle(setting, 'betterdocs_live_search_custom_background_width', true);

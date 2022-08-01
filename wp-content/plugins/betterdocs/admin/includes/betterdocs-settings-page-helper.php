@@ -463,6 +463,12 @@ function betterdocs_settings_args(){
                                     'default'   => 1,
                                     'priority'	=> 10
                                 ),
+                                'toc_dynamic_title' => array(
+                                    'type'      => 'checkbox',
+                                    'label'     => __('Show TOC Title in Anchor Links' , 'betterdocs'),
+                                    'default'   => 0,
+                                    'priority'	=> 10
+                                ),
                                 'enable_sticky_toc' => array(
                                     'type'      => 'checkbox',
                                     'label'     => __('Enable Sticky TOC' , 'betterdocs'),

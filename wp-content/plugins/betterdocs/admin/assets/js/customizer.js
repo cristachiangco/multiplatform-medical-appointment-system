@@ -1321,73 +1321,73 @@
 
     wp.customize( 'betterdocs_live_search_heading_font_size', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h2' ).css( 'font-size', to + 'px');
+            $( '.betterdocs-search-heading h2.heading, .betterdocs-search-heading h1.heading, .betterdocs-search-heading h3.heading, .betterdocs-search-heading h4.heading, .betterdocs-search-heading h5.heading, .betterdocs-search-heading h6.heading' ).css( 'font-size', to + 'px');
         } );
     });
 
     wp.customize( 'betterdocs_live_search_heading_font_color', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h2' ).css( 'color', to );
+            $( '.betterdocs-search-heading h2.heading, .betterdocs-search-heading h1.heading, .betterdocs-search-heading h3.heading, .betterdocs-search-heading h4.heading, .betterdocs-search-heading h5.heading, .betterdocs-search-heading h6.heading' ).css( 'color', to );
         } );
     });
 
     wp.customize( 'betterdocs_live_search_subheading_font_size', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h3' ).css( 'font-size', to + 'px');
+            $( '.betterdocs-search-heading h3.subheading, .betterdocs-search-heading h2.subheading, .betterdocs-search-heading h1.subheading, .betterdocs-search-heading h4.subheading, .betterdocs-search-heading h5.subheading, betterdocs-search-heading h6.subheading' ).css( 'font-size', to + 'px');
         } );
     });
     
     wp.customize( 'betterdocs_live_search_subheading_font_color', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h3' ).css( 'color', to );
+            $( '.betterdocs-search-heading h3.subheading, .betterdocs-search-heading h2.subheading, .betterdocs-search-heading h1.subheading, .betterdocs-search-heading h4.subheading, .betterdocs-search-heading h5.subheading, .betterdocs-search-heading h6.subheading' ).css( 'color', to );
         } );
     });
 
     wp.customize( 'betterdocs_search_heading_margin_top', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h2' ).css( 'margin-top', to + 'px' );
+            $( '.betterdocs-search-heading h2.heading, .betterdocs-search-heading h1.heading, .betterdocs-search-heading h3.heading, .betterdocs-search-heading h4.heading, .betterdocs-search-heading h5.heading, .betterdocs-search-heading h6.heading' ).css( 'margin-top', to + 'px' );
         } );
     });
 
     wp.customize( 'betterdocs_search_heading_margin_right', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h2' ).css( 'margin-right', to + 'px' );
+            $( '.betterdocs-search-heading h2.heading, .betterdocs-search-heading h1.heading, .betterdocs-search-heading h3.heading, .betterdocs-search-heading h4.heading, .betterdocs-search-heading h5.heading, .betterdocs-search-heading h6.heading' ).css( 'margin-right', to + 'px' );
         } );
     });
 
     wp.customize( 'betterdocs_search_heading_margin_bottom', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h2' ).css( 'margin-bottom', to + 'px' );
+            $( '.betterdocs-search-heading h2.heading, .betterdocs-search-heading h1.heading, .betterdocs-search-heading h3.heading, .betterdocs-search-heading h4.heading, .betterdocs-search-heading h5.heading, .betterdocs-search-heading h6.heading' ).css( 'margin-bottom', to + 'px' );
         } );
     });
 
     wp.customize( 'betterdocs_search_heading_margin_left', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h2' ).css( 'margin-left', to + 'px' );
+            $( '.betterdocs-search-heading h2.heading, .betterdocs-search-heading h1.heading, .betterdocs-search-heading h3.heading, .betterdocs-search-heading h4.heading, .betterdocs-search-heading h5.heading, .betterdocs-search-heading h6.heading' ).css( 'margin-left', to + 'px' );
         } );
     });
 
     wp.customize( 'betterdocs_search_subheading_margin_top', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h3' ).css( 'margin-top', to + 'px' );
+            $( '.betterdocs-search-heading h3.subheading, .betterdocs-search-heading h2.subheading, .betterdocs-search-heading h1.subheading, .betterdocs-search-heading h4.subheading, .betterdocs-search-heading h5.subheading, .betterdocs-search-heading h6.subheading' ).css( 'margin-top', to + 'px' );
         } );
     });
 
     wp.customize( 'betterdocs_search_subheading_margin_right', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h3' ).css( 'margin-right', to + 'px' );
+            $( '.betterdocs-search-heading h3.subheading, .betterdocs-search-heading h2.subheading, .betterdocs-search-heading h1.subheading, .betterdocs-search-heading h4.subheading, .betterdocs-search-heading h5.subheading, .betterdocs-search-heading h6.subheading' ).css( 'margin-right', to + 'px' );
         } );
     });
 
     wp.customize( 'betterdocs_search_subheading_margin_bottom', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h3' ).css( 'margin-bottom', to + 'px' );
+            $( '.betterdocs-search-heading h3.subheading, .betterdocs-search-heading h2.subheading, .betterdocs-search-heading h1.subheading, .betterdocs-search-heading h4.subheading, .betterdocs-search-heading h5.subheading, .betterdocs-search-heading h6.subheading' ).css( 'margin-bottom', to + 'px' );
         } );
     });
 
     wp.customize( 'betterdocs_search_subheading_margin_left', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-search-heading h3' ).css( 'margin-left', to + 'px' );
+            $( '.betterdocs-search-heading h3.subheading, .betterdocs-search-heading h2.subheading, .betterdocs-search-heading h1.subheading, .betterdocs-search-heading h4.subheading, .betterdocs-search-heading h5.subheading, .betterdocs-search-heading h6.subheading' ).css( 'margin-left', to + 'px' );
         } );
     });
 

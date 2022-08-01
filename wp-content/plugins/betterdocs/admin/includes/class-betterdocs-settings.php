@@ -467,8 +467,12 @@ class BetterDocs_Settings {
         $terms = array(
             'all' => 'All'
         );
-        foreach($get_terms as $key=>$value) {
-            $terms[$value->slug] = $value->name;
+        if (!empty($get_terms) && !is_wp_error($get_terms)) {
+            foreach($get_terms as $value) {
+                if (isset($value->slug) && isset($value->name)) {
+                    $terms[$value->slug] = $value->name;
+                }
+            }
         }
         return $terms;
     }

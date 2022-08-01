@@ -289,7 +289,8 @@ class BetterDocs_Public {
 					$title = strip_tags( $title );
 					$has_id = preg_match('/id=(["\'])(.*?)\1[\s>]/si', $matches[ $i ][0], $matched_ids);
 					$id = $has_id ? $matched_ids[2] : $i . '-toc-title';
-
+					$dynamic_toc_title_switch =  BetterDocs_DB::get_settings('toc_dynamic_title');
+					$id =  $dynamic_toc_title_switch === 1 || $dynamic_toc_title_switch != 'off' ? sanitize_title($title) : $id; 
 					$html .= '<a href="#' . $id . '">' . $title . '</a>';
 
 					// end lists
@@ -357,6 +358,8 @@ class BetterDocs_Public {
 					$title = strip_tags( $title );
 					$has_id = preg_match('/id=(["\'])(.*?)\1[\s>]/si', $matches[ $i ][0], $matched_ids);
 					$id = $has_id ? $matched_ids[2] : $i . '-toc-title';
+					$dynamic_toc_title_switch = BetterDocs_DB::get_settings('toc_dynamic_title');
+					$id    =  $dynamic_toc_title_switch === 1 || $dynamic_toc_title_switch != 'off' ? sanitize_title( $title ) : $id;
 					$html .= '<a href="#'.$id.'">' . $title . '</a>';
 					$html .= '</li>';
 				}
@@ -415,6 +418,8 @@ class BetterDocs_Public {
 				//$title = strip_tags($matches[3]);
 				preg_match('/id=(["\'])(.*?)\1[\s>]/si', $matches[0], $matched_ids);
 				$id = !empty($matched_ids[2]) ? $matched_ids[2] : $index . '-toc-title';
+				$dynamic_toc_title_switch = BetterDocs_DB::get_settings('toc_dynamic_title');
+				$id = $dynamic_toc_title_switch === 1 || $dynamic_toc_title_switch != 'off' ? sanitize_title( $matches[3] ) : $id;
                 $index++;
 
 				$title_link_ctc = BetterDocs_DB::get_settings('title_link_ctc');
@@ -460,18 +465,20 @@ class BetterDocs_Public {
         $output = betterdocs_generate_output();
         $live_search = BetterDocs_DB::get_settings('live_search');
         $search_placeholder = BetterDocs_DB::get_settings('search_placeholder');
-        $search_heading = $search_subheading = '';
+        $search_heading = $search_subheading = $heading_tag = $subheading_tag = '';
         if ( $output['betterdocs_live_search_heading_switch'] == true ) {
             $search_heading_switch = $output['betterdocs_live_search_heading_switch'];
             $search_heading = $output['betterdocs_live_search_heading'];
             $search_subheading = $output['betterdocs_live_search_subheading'];
+			$heading_tag = $output['betterdocs_live_search_heading_tag'];
+			$subheading_tag = $output['betterdocs_live_search_subheading_tag'];
         }
 
         if ( $live_search == 1 ) {
             $html = '<div class="betterdocs-search-form-wrap">'. do_shortcode( '[betterdocs_search_form
                 placeholder="'.$search_placeholder.'"
                 heading="'.$search_heading.'"
-                subheading="'.$search_subheading.'"]').'</div>';
+                subheading="'.$search_subheading.'" heading_tag="'.$heading_tag.'" subheading_tag="'.$subheading_tag.'"]').'</div>';
 
             return apply_filters('betterdocs_search_section', $html);
         }

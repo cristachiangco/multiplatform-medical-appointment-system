@@ -37,11 +37,19 @@ function betterdocs_categorygrid_block_init()
         filemtime("$dir/$index_js")
     );
 
+    wp_register_style(
+        'betterdocs-fontawesome-frontend',
+        BETTERDOCS_URL . 'admin/assets/css/font-awesome5.css',
+        array(),
+        BETTERDOCS_VERSION,
+        'all'
+    );
+
     $editor_style = 'categorygrid/style.css';
     wp_register_style(
         'betterdocs-categorygrid-block-editor',
         plugins_url($editor_style, __FILE__),
-        array(),
+        array('betterdocs-fontawesome-frontend'),
         filemtime("$dir/$editor_style"),
         'all'
     );
@@ -53,8 +61,6 @@ function betterdocs_categorygrid_block_init()
         array('masonry'),
         filemtime("$dir/$grid_script")
     );
-
-
 
     register_block_type(__DIR__ . '/categorygrid', array(
         'editor_script' => 'betterdocs-categorygrid-block-editor',

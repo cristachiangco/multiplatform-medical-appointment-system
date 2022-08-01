@@ -151,7 +151,7 @@ class BetterDocs_Admin
 			array(
 				'menu_title' => __('Switch to BetterDocs UI', 'betterdocs'),
 				'site_address' => get_bloginfo('url'),
-				'betterdocs_pro_plugin' => in_array('betterdocs-pro/betterdocs-pro.php', apply_filters('active_plugins', get_option('active_plugins'))) ? 'true' : 'false'
+				'betterdocs_pro_plugin' => is_plugin_active('betterdocs-pro/betterdocs-pro.php') ? 'true' : 'false'
 			)
 		);
 

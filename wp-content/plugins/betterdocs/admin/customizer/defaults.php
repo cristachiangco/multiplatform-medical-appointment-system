@@ -304,6 +304,8 @@ function betterdocs_get_option_defaults() {
 		'betterdocs_live_search_subheading' => '',
 		'betterdocs_live_search_subheading_font_size' => 16,
 		'betterdocs_live_search_heading_font_color' => '#566e8b',
+		'betterdocs_live_search_heading_tag' => 'h2',
+		'betterdocs_live_search_subheading_tag' => 'h3',
 		'betterdocs_search_heading_margin' => '',
 		'betterdocs_search_heading_margin_top' => '0',
 		'betterdocs_search_heading_margin_right' => '0',
