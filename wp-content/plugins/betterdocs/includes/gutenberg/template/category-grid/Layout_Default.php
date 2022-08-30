@@ -65,8 +65,8 @@ if ($showList) {
 
             $html .= '<li>';
 
-            $html .= '<i class="' . $listIcon . ' el-betterdocs-cg-post-list-icon"></i>';
-            $html .= '<a ' . implode(' ', $attr) . '>' . get_the_title() . '</a>
+            $html .= '<i class="' . esc_attr($listIcon) . ' el-betterdocs-cg-post-list-icon"></i>';
+            $html .= '<a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a>
                     </li>';
         }
         $html .= '</ul>';
@@ -84,17 +84,17 @@ $html .= '<div class="el-betterdocs-cg-footer">';
 if ($showButton) {
     $term_permalink = BetterDocs_Helper::term_permalink('doc_category', $term->slug);
 
-    $html .= '<a class="el-betterdocs-cg-button" href="' . $term_permalink . '">';
+    $html .= '<a class="el-betterdocs-cg-button" href="' . esc_url($term_permalink) . '">';
 
     if ($showButtonIcon && $buttonIconPosition === 'before') {
-        $html .= '<i class="' . $buttonIcon . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-left"></i>';
+        $html .= '<i class="' . esc_attr($buttonIcon) . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-left"></i>';
     }
 
-    $html .= $buttonText;
+    $html .= esc_html($buttonText);
 
     if ($showButtonIcon && $buttonIconPosition === 'after') {
 
-        $html .= '<i class="' . $buttonIcon . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-right"></i>';
+        $html .= '<i class="' . esc_attr($buttonIcon) . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-right"></i>';
     }
 
     $html .= '</a>';

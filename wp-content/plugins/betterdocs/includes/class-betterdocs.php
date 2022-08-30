@@ -69,8 +69,8 @@ class BetterDocs
 	 */
 	public function __construct()
 	{
-		if (defined('BETTER_DOCUMENTATION_VERSION')) {
-			$this->version = BETTER_DOCUMENTATION_VERSION;
+		if (defined('BETTERDOCS_VERSION')) {
+			$this->version = BETTERDOCS_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}

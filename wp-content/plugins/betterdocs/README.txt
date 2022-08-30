@@ -5,7 +5,7 @@ Tags:  knowledge base, docs, documentation, documents, wiki, faq page, doc, know
 Requires at least: 4.0
 Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 2.1.2
+Stable tag: 2.1.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -174,6 +174,19 @@ Yes, it will work with any standard WordPress theme.
 
 
 == Changelog ==
+
+= 2.1.5 - 22/08/2022 = 
+- Fixed: HTML not rendering inside Category Description
+- Few minor bug fixes & improvements
+
+= 2.1.4 - 11/08/2022 = 
+- Fixed: Elementor Deprecated functions error
+- Fixed: Category Box Masonry width not being equal in right side
+- Few minor bug fixes & improvements
+
+
+= 2.1.3 - 08/08/2022 = 
+- Fixed: Sanitized some missing strings
 
 = 2.1.2 - 26/07/2022 = 
 - Fixed: Triggering fatal error during activation

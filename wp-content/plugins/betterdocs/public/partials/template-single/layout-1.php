@@ -63,7 +63,9 @@ $output = betterdocs_generate_output();
 							$enable_post_title = BetterDocs_DB::get_settings('enable_post_title');
                             $output = betterdocs_generate_output();
 							if ( $enable_post_title == 1 ) {
-								the_title( '<'.BetterDocs_Helper::html_tag($output['betterdocs_post_title_tag']).' id="betterdocs-entry-title" class="betterdocs-entry-title">', '</'.BetterDocs_Helper::html_tag($output['betterdocs_post_title_tag']).'>' );
+                                echo '<'.BetterDocs_Helper::html_tag($output['betterdocs_post_title_tag']).' id="betterdocs-entry-title" class="betterdocs-entry-title">';
+                                echo esc_html(get_the_title());
+                                echo '</'.BetterDocs_Helper::html_tag($output['betterdocs_post_title_tag']).'>';
 							}
 						?>
 					</div>

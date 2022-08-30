@@ -1706,7 +1706,7 @@ class BetterDocs_Elementor_Category_Grid extends Widget_Base
                             $column_space = $grid.data('column-space');
                         if ($layout_mode === 'masonry') {
                             let masonryItem = $(".el-betterdocs-category-grid-post", $grid);
-                            let total_margin = $column * $column_space;
+                            let total_margin = ($column - 1) * $column_space;
                             masonryItem.css("width", "calc((100% - " + total_margin + "px) / " + parseInt($column) + ")");
                             $grid.masonry({
                                 itemSelector: ".el-betterdocs-category-grid-post",

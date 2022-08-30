@@ -64,9 +64,9 @@ if ($sub_categories) {
                 $sub_attr = ['href="' . get_the_permalink() . '"'];
                 $html .= '<li class="sub-list">';
 
-                $html .= '<i class="' . $listIcon . ' el-betterdocs-cg-post-list-icon"></i>';
+                $html .= '<i class="' . esc_attr($listIcon) . ' el-betterdocs-cg-post-list-icon"></i>';
 
-                $html .= '<a ' . implode(' ', $sub_attr) . '>' . get_the_title() . '</a></li>';
+                $html .= '<a ' . implode(' ', $sub_attr) . '>' . esc_html(get_the_title()) . '</a></li>';
             endwhile;
         endif;
         wp_reset_query();

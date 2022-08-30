@@ -11,10 +11,10 @@ $html .= '<article class="el-betterdocs-category-grid-post layout-2">
 if ($showHeader) {
     $html .= '<div class="el-betterdocs-cg-header">';
     if ($showCount) {
-        $html .= '<div class="el-betterdocs-item-count" data-content="' . $term_count . '"></div>';
+        $html .= '<div class="el-betterdocs-item-count" data-content="' . esc_attr($term_count) . '"></div>';
     }
     if ($showTitle) {
-        $html .= '<' . $titleTag . ' class="el-betterdocs-cat-title">' . $term->name . '</' . $titleTag . '>';
+        $html .= '<' . BetterDocs_Helper::validate_html_tag($titleTag) . ' class="el-betterdocs-cat-title">' . $term->name . '</' . BetterDocs_Helper::validate_html_tag($titleTag) . '>';
     }
     $html .= '</div>';
 }
@@ -55,9 +55,9 @@ if ($showList) {
 
             $html .= '<li>';
 
-            $html .= '<i class="' . $listIcon . ' el-betterdocs-cg-post-list-icon"></i>';
+            $html .= '<i class="' . esc_attr($listIcon) . ' el-betterdocs-cg-post-list-icon"></i>';
 
-            $html .= '<a ' . implode(' ', $attr) . '>' . get_the_title() . '</a>
+            $html .= '<a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a>
                     </li>';
         }
 
@@ -77,18 +77,18 @@ $html .= '<div class="el-betterdocs-cg-footer">';
 if ($showButton) {
     $term_permalink = BetterDocs_Helper::term_permalink('doc_category', $term->slug);
 
-    $html .= '<a class="el-betterdocs-cg-button" href="' . $term_permalink . '">';
+    $html .= '<a class="el-betterdocs-cg-button" href="' . esc_url($term_permalink) . '">';
 
     if ($showButtonIcon && $buttonIconPosition === 'before') {
 
-        $html .= '<i class="' . $buttonIcon . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-left"></i>';
+        $html .= '<i class="' . esc_attr($buttonIcon) . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-left"></i>';
     }
 
-    $html .= $buttonText;
+    $html .= esc_html($buttonText);
 
     if ($showButtonIcon && $buttonIconPosition === 'after') {
 
-        $html .= '<i class="' . $buttonIcon . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-right"></i>';
+        $html .= '<i class="' . esc_attr($buttonIcon) . ' el-betterdocs-cg-button-icon el-betterdocs-cg-button-icon-right"></i>';
     }
 
     $html .= '</a>';

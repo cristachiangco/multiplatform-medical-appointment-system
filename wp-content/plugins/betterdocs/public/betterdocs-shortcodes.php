@@ -174,15 +174,15 @@ function betterdocs_category_grid($atts, $content = null)
 						$cat_icon = '';
 					}
 
-					echo '<div id="cat-id-'.$term_id.'" class="'. esc_attr($wrap_class) .'">
+					echo '<div id="cat-id-'. esc_attr($term_id) .'" class="'. esc_attr($wrap_class) .'">
 						<div class="'. esc_attr($title_class) .'">
 							<div class="docs-cat-title-inner">';
 								$term_permalink = BetterDocs_Helper::term_permalink('doc_category', $term->slug);
 
 								if ($get_args['sidebar_list'] == true) {
-									echo '<div class="docs-cat-title">' . $cat_icon . '<'.$get_args['title_tag'].' class="docs-cat-heading">' . $term->name . '</'.$get_args['title_tag'].'></div>';
+									echo '<div class="docs-cat-title">' . $cat_icon . '<'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .' class="docs-cat-heading">' . $term->name . '</'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .'></div>';
 								} else {
-									echo '<div class="docs-cat-title">' . $cat_icon . '<a href="' . esc_url($term_permalink) . '"><'.$get_args['title_tag'].' class="docs-cat-heading">' . $term->name . '</'.$get_args['title_tag'].'></a></div>';
+									echo '<div class="docs-cat-title">' . $cat_icon . '<a href="' . esc_url($term_permalink) . '"><'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .' class="docs-cat-heading">' . $term->name . '</'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .'></a></div>';
 								}
 
 								if ($post_count == 1 && $post_counter_check == true) {
@@ -211,7 +211,7 @@ function betterdocs_category_grid($atts, $content = null)
 									if ($page_cat === get_the_ID() && BetterDocs_Helper::get_tax() != 'doc_category') {
 										$attr[] = 'class="active"';
 									}
-									echo '<li>' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $attr) . '>' . get_the_title() . '</a></li>';
+									echo '<li>' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a></li>';
 								endwhile;
 								echo '</ul>';
 							endif;
@@ -251,7 +251,7 @@ function betterdocs_category_grid($atts, $content = null)
 					<div class="docs-cat-title-inner">
 						<div class="docs-cat-title">
 							<img class="docs-cat-icon" src="<?php echo BETTERDOCS_ADMIN_URL ?>assets/img/betterdocs-cat-icon.svg" alt="">
-                            <'.$get_args['title_tag'].'>'.esc_html__('Uncategorised', 'betterdocs').'</'.$get_args['title_tag'].'>
+                            <'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .'>'.esc_html__('Uncategorised', 'betterdocs').'</'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .'>
 						</div>
 					</div>
 				</div>
@@ -278,7 +278,7 @@ function betterdocs_category_grid($atts, $content = null)
 						echo '<ul>';
 						while ($post_query->have_posts()) : $post_query->the_post();
 							$attr = ['href="' . get_the_permalink() . '"'];
-							echo '<li>' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $attr) . '>' . get_the_title() . '</a></li>';
+							echo '<li>' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a></li>';
 						endwhile;
 						echo '</ul>';
 					endif;
@@ -295,7 +295,7 @@ function betterdocs_category_grid($atts, $content = null)
                 let columnPerGrid = jQuery(".betterdocs-categories-wrap.layout-masonry").attr("data-column");
                 let masonryItem = jQuery(".betterdocs-categories-wrap.layout-masonry .docs-single-cat-wrap");
                 let doc_page_column_space = '.$output['betterdocs_doc_page_column_space'].';
-                let total_margin = columnPerGrid * doc_page_column_space;
+                let total_margin = (columnPerGrid - 1) * doc_page_column_space;
                 if (masonryGrid.length) {
                     masonryItem.css("width", "calc((100% - "+total_margin+"px) / "+parseInt(columnPerGrid)+")");
                     masonryGrid.masonry({
@@ -336,7 +336,7 @@ function betterdocs_category_grid($atts, $content = null)
 						if ($page_cat === get_the_ID() && BetterDocs_Helper::get_tax() != 'doc_category') {
 							$sub_attr[] = 'class="active"';
 						}
-						echo '<li class="sub-list">' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $sub_attr) . '>' . get_the_title() . '</a></li>';
+						echo '<li class="sub-list">' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $sub_attr) . '>' . esc_html(get_the_title()) . '</a></li>';
 					endwhile;
 				endif;
 				wp_reset_query();
@@ -432,7 +432,7 @@ function betterdocs_category_grid($atts, $content = null)
                         <div class="<?php echo esc_attr($title_class) ?>">
                             <div class="docs-cat-title-inner">
                                 <?php
-                                echo '<div class="docs-cat-title"><a href="' . esc_url($term_permalink) . '"><'.$get_args['title_tag'].' class="docs-cat-heading">' . $term->name . '</'.$get_args['title_tag'].'></a></div>';
+                                echo '<div class="docs-cat-title"><a href="' . esc_url($term_permalink) . '"><'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .' class="docs-cat-heading">' . $term->name . '</'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .'></a></div>';
                                 ?>
                             </div>
                         </div>
@@ -449,7 +449,7 @@ function betterdocs_category_grid($atts, $content = null)
                                     if ($page_cat === get_the_ID()) {
                                         $attr[] = 'class="active"';
                                     }
-                                    echo '<li><a ' . implode(' ', $attr) . '>' . get_the_title() . '</a></li>';
+                                    echo '<li><a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a></li>';
                                 endwhile;
 
                                 echo '</ul>';
@@ -564,7 +564,7 @@ function betterdocs_category_grid($atts, $content = null)
 							echo '<img class="docs-cat-icon" src="' . BETTERDOCS_ADMIN_URL . 'assets/img/betterdocs-cat-icon.svg" alt="">';
 						}
 					}
-						echo '<'.$get_args['title_tag'].' class="docs-cat-title">' . $term->name . '</'.$get_args['title_tag'].'>';
+						echo '<'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .' class="docs-cat-title">' . $term->name . '</'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .'>';
 						$cat_desc = get_theme_mod('betterdocs_doc_page_cat_desc');
 						if ($cat_desc == true) {
 							echo '<p class="cat-description">' . $term->description . '</p>';
@@ -727,7 +727,7 @@ function betterdocs_get_search_result() {
 			} elseif ($search_result_image == 1 && !empty($first_img)) {
 				$icon = '<img src="' . $first_img . '" alt="">';
 			}
-			$output .= '<li>' . $icon . '<a href="' . get_permalink() . '"><span class="betterdocs-search-title">' . get_the_title() . '</span><br><span class="betterdocs-search-category">' . $all_terms . '</span></a></li>';
+			$output .= '<li>' . $icon . '<a href="' . get_permalink() . '"><span class="betterdocs-search-title">' . esc_html(get_the_title()) . '</span><br><span class="betterdocs-search-category">' . $all_terms . '</span></a></li>';
 		endwhile;
 	else :
         $input_not_found = $search_input;

@@ -19,6 +19,6 @@ class BetterDocs_Elementor_Title_Tag extends Base_Tag {
         if (get_post_type(get_the_ID()) != 'docs') {
             return;
         }
-        echo get_the_title();
+        echo esc_html(get_the_title());
     }
 }

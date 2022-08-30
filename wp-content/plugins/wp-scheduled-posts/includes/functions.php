@@ -194,7 +194,7 @@ if (!function_exists('wpscp_prevent_future_post_markup')) {
 			?>
 			<div style="padding:10px;" id="prevent_future_post_box">
 				<input type="checkbox" name="prevent_future_post" value="yes" id="wpsp_prevent_future_post" <?php echo ($post_gmt_timestamp > $current_gmt_timestamp && $post->post_status != 'future') ? ' checked="checked"' : ''; ?> />
-				<label for="wpsp_prevent_future_post"> <?php esc_html_e('Publish future post immediately', 'wp-scheduled-posts'); ?><a id="wpscp-future-post-help-handler" href="javascript:void();" title="Show/Hide Help"><?php print esc_html('(?)'); ?></a></label>
+				<label for="wpsp_prevent_future_post"> <?php esc_html_e('Publish future post immediately', 'wp-scheduled-posts'); ?><a href="javascript:void();" title="Show/Hide Help" style="text-decoration: none;"><span id="wpscp-future-post-help-handler" class="dashicons dashicons-info"></span></a></label>
 				<div id="wpsp_date_type" style="margin-left: 25px; display: none;">
 					<input type="radio" id="current_date" name="date_type" value="current">
 					<label for="current_date">Current Date</label>
@@ -202,7 +202,7 @@ if (!function_exists('wpscp_prevent_future_post_markup')) {
 					<label for="future_date">Future Date</label>
 				</div>
 				<div style="border:1px solid #FFEBE8; background:#FEFFE8; padding:5px; display:none;" id="wpscp-future-post-help-info">
-					<?php esc_html_e('If you schedule this post and check this option then your post will be published immediately but post date-time will not set current date. Post date-time will be your scheduled future date-time.', 'wp-scheduled-posts'); ?>
+					<?php esc_html_e('If you choose to publish this future post with the Future Date, it will be published immediately but the post’s date time will not set the current date rather it will be your scheduled future date time.', 'wp-scheduled-posts'); ?>
 				</div>
 			</div>
 <?php
@@ -222,6 +222,38 @@ if (!function_exists('wpscp_submit_box_future_post')) {
 		if (isset($_GET['action']) && $_GET['action'] == 'edit' && \WPSP\Helper::get_settings('show_publish_post_button') == true) {
 			add_action('post_submitbox_misc_actions', 'wpscp_prevent_future_post_markup');
 		}
+		$allow_post_types = \WPSP\Helper::get_settings('allow_post_types');
+		$post_types = (!empty($allow_post_types) ? $allow_post_types : array('post'));
+
+		foreach ($post_types as $key => $post_type) {
+			add_filter("rest_prepare_$post_type", 'wpscp_rest_prepare', 10, 3);
+		}
 	}
 }
 add_action('init', 'wpscp_submit_box_future_post');
+
+
+function wpscp_rest_prepare($response, $post, $request){
+	if(!empty($request['meta']['prevent_future_post'])){
+		update_post_meta( $post->ID, 'prevent_future_post', $post->post_date );
+		$data = $response->get_data();
+		$data['status'] = 'publish';
+		$response->set_data($data);
+	}
+	return $response;
+}
+
+add_filter('wp_insert_post_data', function($post_data, $postarr = []){
+	$id = isset($postarr['ID']) ? $postarr['ID'] : 0;
+	$prevent_future_post = get_post_meta( $id, 'prevent_future_post', true );
+	if ($prevent_future_post == $post_data['post_date']) {
+		if ($post_data['post_status'] == 'future') {
+			$post_data['post_status'] = 'publish';
+			remove_action('future_post', '_future_post_hook');
+		}
+	}
+	else if($prevent_future_post) {
+		delete_post_meta($id, 'prevent_future_post');
+	}
+	return $post_data;
+}, 10, 2);

@@ -14,7 +14,7 @@ function betterdocs_get_pages() {
     if( ! empty( $_pages ) ) {
         $pages[0] = 'Select a Page';
         foreach( $_pages as $page ) {
-            $pages[ $page->ID ] = $page->post_title;
+            $pages[ $page->ID ] = esc_html($page->post_title);
         }
     }
 

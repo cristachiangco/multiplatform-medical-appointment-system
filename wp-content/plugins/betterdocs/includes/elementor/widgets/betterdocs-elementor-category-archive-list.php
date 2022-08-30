@@ -480,7 +480,7 @@ class BetterDocs_Category_Archive_List extends Widget_Base
         if ($post_query->have_posts()) :
             echo '<ul>';
             while ($post_query->have_posts()) : $post_query->the_post();
-                echo '<li>' . BetterDocs_Helper::list_svg() . '<a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
+                echo '<li>' . BetterDocs_Helper::list_svg() . '<a href="' . get_the_permalink() . '">' . esc_html(get_the_title()) . '</a></li>';
             endwhile;
         endif;
         wp_reset_query();

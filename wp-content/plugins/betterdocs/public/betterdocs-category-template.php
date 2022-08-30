@@ -55,7 +55,7 @@ $term = get_term_by('slug', $wp_query->query['doc_category'], 'doc_category');
 
 				echo '<div class="docs-cat-title">';
 					echo wp_sprintf('<'.BetterDocs_Helper::html_tag($output['betterdocs_archive_title_tag']).' class="docs-cat-heading">%s </'.BetterDocs_Helper::html_tag($output['betterdocs_sidebar_title_tag']).'>', $term->name);
-					echo wp_sprintf('<p>%s</p>', esc_attr( $term->description ) );
+					echo wp_sprintf('<p>%s</p>', $term->description );
 				echo '</div>
 				<div class="docs-list">';
 					$multikb = apply_filters('betterdocs_cat_template_multikb', false);
@@ -66,7 +66,7 @@ $term = get_term_by('slug', $wp_query->query['doc_category'], 'doc_category');
 					if ($post_query->have_posts()) :
 						echo '<ul>';
 						while ($post_query->have_posts()) : $post_query->the_post();
-							echo '<li>' . BetterDocs_Helper::list_svg() . '<a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
+							echo '<li>' . BetterDocs_Helper::list_svg() . '<a href="' . get_the_permalink() . '">' . esc_html(get_the_title()) . '</a></li>';
 						endwhile;
 						echo '</ul>';
 					endif;

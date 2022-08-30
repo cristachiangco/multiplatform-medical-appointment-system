@@ -38,7 +38,7 @@ class BetterDocs_Elementor
             add_action('wp_enqueue_scripts', [__CLASS__, 'editor_load_asset']);
             add_action('elementor/init', [__CLASS__, 'load_basic_widgets']);
             if (is_plugin_active('elementor-pro/elementor-pro.php')) {
-                add_action('elementor/widgets/widgets_registered', [__CLASS__, 'register_theme_builder_widgets']);
+	            add_action('elementor/widgets/register', [__CLASS__, 'register_theme_builder_widgets']);
                 add_action('elementor/init', [__CLASS__, 'load_theme_builder_widgets']);
                 add_action('elementor/theme/register_conditions', [__CLASS__, 'register_conditions']);
             }
@@ -191,7 +191,7 @@ class BetterDocs_Elementor
         foreach (self::get_basic_widget_list() as $value) {
             if (class_exists($value)) {
                 //error_log( print_r(self::get_basic_widget_list(), TRUE) );
-                $widgets_manager->register_widget_type(new $value);
+                $widgets_manager->register(new $value);
             }
         }
     }
@@ -210,7 +210,7 @@ class BetterDocs_Elementor
     {
         foreach (self::get_theme_builder_widget_list() as $value) {
             if (class_exists($value)) {
-                $widgets_manager->register_widget_type(new $value);
+                $widgets_manager->register(new $value);
             }
         }
     }
@@ -220,7 +220,7 @@ class BetterDocs_Elementor
         require_once BETTERDOCS_DIR_PATH . 'includes/elementor/widgets/betterdocs-elementor-title-tag.php';
 
         $module = Plugin::elementor()->dynamic_tags;
-        $module->register_tag(new BetterDocs_Elementor_Title_Tag());
+        $module->register(new BetterDocs_Elementor_Title_Tag());
     }
 
     public static function promote_pro_elements($config)
@@ -898,7 +898,7 @@ class BetterDocs_Elementor
                         } else {
                             $html .= '<i class="' . $settings['list_icon']['value'] . ' el-betterdocs-cg-post-list-icon"></i>';
                         }
-                        $html .= '<a ' . implode(' ', $sub_attr) . '>' . get_the_title() . '</a></li>';
+                        $html .= '<a ' . implode(' ', $sub_attr) . '>' . esc_html(get_the_title()) . '</a></li>';
                     endwhile;
                 endif;
                 wp_reset_query();
