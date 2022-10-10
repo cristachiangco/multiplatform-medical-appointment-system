@@ -257,23 +257,25 @@
     var catHeading = $(
       ".betterdocs-sidebar-content .docs-single-cat-wrap .docs-cat-title-wrap"
     );
+
+    var active_subcategory = $('.docs-sub-cat.current-sub-cat');
+
     catList.hide();
 
     if (currentCatList.length) {
       currentCatList.show().addClass("show");
-      for(let child of currentCatList[0].children) {
-        //Arrow down only if selected post is from a nested sub category. This is for single post along with sidebar, and for single selected category
-        if( $(child).hasClass('docs-sub-cat') && $(child).hasClass('current-sub-cat') ) {
-          let right = child.previousElementSibling.children[0];
-          let down = child.previousElementSibling.children[1];
-          $(right).css('display', 'none');
-          $(down).css('display', 'inline');
-        }
-      }
     }
 
-    if (currentCatList.length) {
-      currentCatList.show().addClass("show");
+    /**
+     * This code toggles the nested subcat arrow to down direction if it is activated, this approach is from bottom to top
+     */
+    if( active_subcategory.length ) {
+      var subcat = $(active_subcategory);
+      while( subcat.attr('class') === 'docs-sub-cat' || subcat.attr('class') === 'docs-sub-cat current-sub-cat') {
+        subcat.prev().children('.toggle-arrow').toggle();
+        subcat.parent().css('display','block');
+        subcat = subcat.parent();
+      }
     }
 
     catHeading.click(function(e) {

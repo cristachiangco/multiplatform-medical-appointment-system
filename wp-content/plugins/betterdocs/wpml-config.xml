@@ -61,5 +61,13 @@
                 <field type="Doc Table of Contents: TOC Title" editor_type="LINE">toc_title</field>
             </fields>
         </widget>
+        <widget name="betterdocs-category-grid">
+            <conditions>
+                <condition key="widgetType">betterdocs-category-grid</condition>
+            </conditions>
+            <fields>
+                <field type="BetterDocs Category Grid: Button Text" editor_type="LINE">button_text</field>
+            </fields>
+        </widget>
     </elementor-widgets>
 </wpml-config>

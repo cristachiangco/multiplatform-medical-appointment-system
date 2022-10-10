@@ -36,7 +36,7 @@ echo '<article class="el-betterdocs-category-grid-post" data-id="' . get_the_ID(
             $multiple_kb = BetterDocs_Elementor::get_betterdocs_multiple_kb_status();
             if ($multiple_kb == true) {
                 $taxes = array('knowledge_base', 'doc_category');
-
+                $tax_map = [];
                 foreach ($taxes as $tax) {
                     $kterms = get_terms($tax);
 
@@ -70,7 +70,7 @@ echo '<article class="el-betterdocs-category-grid-post" data-id="' . get_the_ID(
                     $kb_term = $settings['selected_knowledge_base'];
                 }
 
-                if($kb_term){
+                if($kb_term && isset($tax_map['knowledge_base'])){
                     $args['tax_query'][] = array(
                         'taxonomy' => 'knowledge_base',
                         'field' => 'term_taxonomy_id',
@@ -118,7 +118,7 @@ echo '<article class="el-betterdocs-category-grid-post" data-id="' . get_the_ID(
                     } else {
                         echo '<i class="' . esc_attr($settings['list_icon']['value']) . ' el-betterdocs-cg-post-list-icon"></i>';
                     }
-                    echo '<a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a>
+                    echo '<a ' . implode(' ', $attr) . '>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</a>
                     </li>';
                 }
                 echo '</ul>';

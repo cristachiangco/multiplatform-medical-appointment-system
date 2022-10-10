@@ -253,9 +253,16 @@ class BetterDocs_Helper
 
     public static function list_query_arg($post_type, $multiple_kb, $tax_slug, $posts_per_grid, $orderby, $order = 'ASC', $kb_slug='')
     {
-        $args = array(
-            'post_type'   => $post_type
-        );
+        if ($post_type === 'docs_any') {
+            $args = array(
+                'post_type'   => 'docs',
+                'post_status' => 'any',
+            );
+        } else {
+            $args = array(
+                'post_type'   => $post_type
+            );
+        }
 
         $tax_query = array(
             array(
@@ -402,7 +409,7 @@ class BetterDocs_Helper
             $terms_object['include'] = explode(',', $terms);
             $terms_object['orderby'] = 'include';
         }
-     
+
         return get_terms(apply_filters('betterdocs_category_terms_object', $terms_object));
     }
 
@@ -444,7 +451,7 @@ class BetterDocs_Helper
         if ($currentKey > 0 || $currentKey != 0) {
             $nextKey = $currentKey - 1;
             $prev_post = $array[$nextKey];
-            $nav = '<a rel="prev" class="next-post" href="'.get_post_permalink($prev_post).'"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" viewBox="0 0 50 50" version="1.1"><g id="surface1"><path style=" " d="M 11.957031 13.988281 C 11.699219 14.003906 11.457031 14.117188 11.28125 14.308594 L 1.015625 25 L 11.28125 35.691406 C 11.527344 35.953125 11.894531 36.0625 12.242188 35.976563 C 12.589844 35.890625 12.867188 35.625 12.964844 35.28125 C 13.066406 34.933594 12.972656 34.5625 12.71875 34.308594 L 4.746094 26 L 48 26 C 48.359375 26.003906 48.695313 25.816406 48.878906 25.503906 C 49.058594 25.191406 49.058594 24.808594 48.878906 24.496094 C 48.695313 24.183594 48.359375 23.996094 48 24 L 4.746094 24 L 12.71875 15.691406 C 13.011719 15.398438 13.09375 14.957031 12.921875 14.582031 C 12.753906 14.203125 12.371094 13.96875 11.957031 13.988281 Z "></path></g></svg>'.esc_html(get_the_title($prev_post)).'</a>';
+            $nav = '<a rel="prev" class="next-post" href="'.get_post_permalink($prev_post).'"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" viewBox="0 0 50 50" version="1.1"><g id="surface1"><path style=" " d="M 11.957031 13.988281 C 11.699219 14.003906 11.457031 14.117188 11.28125 14.308594 L 1.015625 25 L 11.28125 35.691406 C 11.527344 35.953125 11.894531 36.0625 12.242188 35.976563 C 12.589844 35.890625 12.867188 35.625 12.964844 35.28125 C 13.066406 34.933594 12.972656 34.5625 12.71875 34.308594 L 4.746094 26 L 48 26 C 48.359375 26.003906 48.695313 25.816406 48.878906 25.503906 C 49.058594 25.191406 49.058594 24.808594 48.878906 24.496094 C 48.695313 24.183594 48.359375 23.996094 48 24 L 4.746094 24 L 12.71875 15.691406 C 13.011719 15.398438 13.09375 14.957031 12.921875 14.582031 C 12.753906 14.203125 12.371094 13.96875 11.957031 13.988281 Z "></path></g></svg>'.wp_kses(get_the_title($prev_post), BETTERDOCS_KSES_ALLOWED_HTML).'</a>';
         } else {
             $nav = '';
         }
@@ -456,7 +463,7 @@ class BetterDocs_Helper
         if (end($array) != $array[$currentKey]) {
             $nextKey = $currentKey + 1;
             $next_post = $array[$nextKey];
-            $nav = '<a rel="next" class="next-post" href="'.get_post_permalink($next_post).'">'.esc_html(get_the_title($next_post)).'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" viewBox="0 0 50 50" version="1.1"><g id="surface1"><path style=" " d="M 38.035156 13.988281 C 37.628906 13.980469 37.257813 14.222656 37.09375 14.59375 C 36.933594 14.96875 37.015625 15.402344 37.300781 15.691406 L 45.277344 24 L 2.023438 24 C 1.664063 23.996094 1.328125 24.183594 1.148438 24.496094 C 0.964844 24.808594 0.964844 25.191406 1.148438 25.503906 C 1.328125 25.816406 1.664063 26.003906 2.023438 26 L 45.277344 26 L 37.300781 34.308594 C 36.917969 34.707031 36.933594 35.339844 37.332031 35.722656 C 37.730469 36.105469 38.363281 36.09375 38.746094 35.691406 L 49.011719 25 L 38.746094 14.308594 C 38.5625 14.109375 38.304688 13.996094 38.035156 13.988281 Z "></path></g></svg></a>';
+            $nav = '<a rel="next" class="next-post" href="'.get_post_permalink($next_post).'">'.wp_kses(get_the_title($next_post), BETTERDOCS_KSES_ALLOWED_HTML).'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" viewBox="0 0 50 50" version="1.1"><g id="surface1"><path style=" " d="M 38.035156 13.988281 C 37.628906 13.980469 37.257813 14.222656 37.09375 14.59375 C 36.933594 14.96875 37.015625 15.402344 37.300781 15.691406 L 45.277344 24 L 2.023438 24 C 1.664063 23.996094 1.328125 24.183594 1.148438 24.496094 C 0.964844 24.808594 0.964844 25.191406 1.148438 25.503906 C 1.328125 25.816406 1.664063 26.003906 2.023438 26 L 45.277344 26 L 37.300781 34.308594 C 36.917969 34.707031 36.933594 35.339844 37.332031 35.722656 C 37.730469 36.105469 38.363281 36.09375 38.746094 35.691406 L 49.011719 25 L 38.746094 14.308594 C 38.5625 14.109375 38.304688 13.996094 38.035156 13.988281 Z "></path></g></svg></a>';
         } else {
             $nav = '';
         }
@@ -668,7 +675,90 @@ class BetterDocs_Helper
     }
 
     /**
-     * validate html tag
+     * This function returns doc tags markup
+     *
+     * @param int $post_id
+     * @param string $taxonomy
+     * @return string | array
+     */
+    public static function get_post_tags_markup( $post_id, $taxonomy = 'doc_tag' ) {
+        $tag_links = array();
+        $post_tags = wp_get_object_terms( $post_id, $taxonomy );
+        
+        if( ! empty( $post_tags ) || ! is_wp_error( $post_tags ) ) {
+            foreach( $post_tags as $term ) {
+                $term_link = get_term_link( $term->slug, 'doc_tag' );
+                $term_name = isset( $term->name ) ?  esc_html( $term->name ) : '';
+                array_push( $tag_links,  '<a href="' .$term_link. '">' .$term_name. '</a>');
+            }
+            $tag_links = '<div class="betterdocs-tags">'.join( ', ', $tag_links ).'</div>';
+        }
+
+        return $tag_links;
+    }
+
+    /**
+     * Get the terms that have posts greater than 0 & Count Change Based On Doc Category Page
+     */
+    public static function get_doc_terms( $multiple_kb, $order, $orderby, $tax_page, $current_term_id, $nested_subcategory, $kb_slug = '' ) {        
+        $terms_object = array(
+            'hide_empty' => true,
+            'taxonomy' => 'doc_category'
+        );
+
+        $filtered_terms = array();
+
+        if ( $orderby == 'betterdocs_order' ) {
+            $terms_object['meta_key'] = 'doc_category_order';
+            $terms_object['orderby'] = 'meta_value_num';
+            $terms_object['order'] = 'ASC';
+        } else if ($orderby == 1) {
+            $terms_object['orderby'] = 'name';
+            $terms_object['order']   = $order;
+        } else {
+            $terms_object['orderby'] = $orderby;
+            $terms_object['order']   = $order;
+        }
+
+        if ($nested_subcategory == true) {
+            $terms_object['parent'] = 0;
+        }
+
+        $meta_query = '';
+
+        $terms_object['meta_query'] = apply_filters('betterdocs_taxonomy_object_meta_query', $meta_query, $multiple_kb, $kb_slug);
+
+        $terms = get_terms( apply_filters('betterdocs_category_terms_object', $terms_object ) );
+
+        foreach( $terms as $term ) {
+            // If inside doc category then change the count of terms based mkb enable/disable || If outside doc category page then change the count of terms based mkb enable/disable
+            if( $tax_page == 'doc_category' ) {
+                $term_count	     = isset( $term->count ) ? $term->count : '';
+                $term_doc_count	 = betterdocs_get_postcount( $term_count, $term->term_id, $nested_subcategory );
+                $term_doc_count	 = apply_filters('betterdocs_postcount', $term_doc_count, $multiple_kb, $term->term_id, $term->slug, $term_count, $nested_subcategory, $kb_slug);
+            } else {
+                $term_count	     = isset( $term->count ) ? $term->count : '';
+                $kb_slug         = $multiple_kb && ! empty( get_term_meta( $term->term_id,'doc_category_knowledge_base', true )[0] ) ? get_term_meta( $term->term_id,'doc_category_knowledge_base', true )[0] : '';
+                $term_doc_count	 = betterdocs_get_postcount( $term_count, $term->term_id, $nested_subcategory );
+                $term_doc_count	 = apply_filters('betterdocs_postcount', $term_doc_count, $multiple_kb, $term->term_id, $term->slug, $term_count, $nested_subcategory, $kb_slug);
+            }
+            // After fetching the original count of the terms based on mkb enable/disable, include terms that have posts greater than 0
+            if( $term_doc_count > 0 ) {
+                array_push( $filtered_terms, $term );
+            }
+        }
+
+        // Delete the current category when inside doc category page, this is applicable when mkb enable/disable
+        if( in_array( $current_term_id, array_column( $filtered_terms, 'term_id' ) ) && $tax_page == 'doc_category' ) {
+            $current_term_key = array_search( $current_term_id, array_column( $filtered_terms, 'term_id' ) );
+            unset($filtered_terms[$current_term_key]);
+            $filtered_terms = array_values( $filtered_terms );
+        }
+
+        return $filtered_terms;
+    }
+
+    /* validate html tag
      * @param $tag
      * @return mixed|string
      */

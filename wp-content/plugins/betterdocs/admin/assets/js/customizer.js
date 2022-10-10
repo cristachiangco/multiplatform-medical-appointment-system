@@ -218,7 +218,7 @@
 
     wp.customize( 'betterdocs_doc_page_cat_title_color2', function( value ) {
         value.bind( function( to ) {
-            $( '.betterdocs-category-box.single-kb .docs-single-cat-wrap .docs-cat-title, .single-kb .docs-cat-list-2 .docs-cat-title' ).css( 'color', to );
+            $( '.betterdocs-category-box.single-kb .docs-single-cat-wrap .docs-cat-title, .single-kb .docs-cat-list-2 .docs-cat-title, .betterdocs-category-grid-layout-6 .betterdocs-term-info .betterdocs-term-title' ).css( 'color', to );
         } );
     });
     
@@ -1098,6 +1098,18 @@
     wp.customize( 'betterdocs_archive_page_background_position', function( value ) {
         value.bind( function( to ) {
             $( '.betterdocs-category-wraper.betterdocs-single-wraper' ).css( 'background-position', to);
+        } );
+    });
+
+    wp.customize( 'betterdocs_archive_content_area_max_width', function( value ) {
+        value.bind( function( to ) {
+            $( '.betterdocs-single-wraper .betterdocs-content-area, .betterdocs-content-area.doc-category-layout-2' ).css( 'max-width', to + 'px' );
+        } );
+    });
+
+    wp.customize( 'betterdocs_archive_content_area_width', function( value ) {
+        value.bind( function( to ) {
+            $( '.betterdocs-single-wraper .betterdocs-content-area, .betterdocs-content-area.doc-category-layout-2' ).css( 'width', to + '%' );
         } );
     });
     

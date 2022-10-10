@@ -66,7 +66,7 @@ if ($sub_categories) {
 
                 $html .= '<i class="' . esc_attr($listIcon) . ' el-betterdocs-cg-post-list-icon"></i>';
 
-                $html .= '<a ' . implode(' ', $sub_attr) . '>' . esc_html(get_the_title()) . '</a></li>';
+                $html .= '<a ' . implode(' ', $sub_attr) . '>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</a></li>';
             endwhile;
         endif;
         wp_reset_query();

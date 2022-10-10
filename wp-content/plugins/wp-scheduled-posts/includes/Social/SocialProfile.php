@@ -138,10 +138,15 @@ class SocialProfile
      */
     public function social_profile_fetch_user_info_and_token()
     {
-        $type = (isset($_POST['type']) ? $_POST['type'] : '');
-        $code = (isset($_POST['code']) ? $_POST['code'] : '');
-        $app_id = (isset($_POST['appId']) ? $_POST['appId'] : '');
-        $app_secret = (isset($_POST['appSecret']) ? $_POST['appSecret'] : '');
+        $type          = (isset($_POST['type']) ? $_POST['type'] : '');
+        $code          = (isset($_POST['code']) ? $_POST['code'] : '');
+        $app_id        = (isset($_POST['appId']) ? $_POST['appId'] : '');
+        $app_secret    = (isset($_POST['appSecret']) ? $_POST['appSecret'] : '');
+        $redirectURI   = (isset($_POST['redirectURI']) ? $_POST['redirectURI'] : '');
+        $access_token  = (isset($_POST['access_token']) ? $_POST['access_token'] : '');
+        $refresh_token = (isset($_POST['refresh_token']) ? $_POST['refresh_token'] : '');
+        $expires_in    = (isset($_POST['expires_in']) ? $_POST['expires_in'] : '');
+        $rt_expires_in = (isset($_POST['rt_expires_in']) ? $_POST['rt_expires_in'] : '');
         // user
         $current_user = wp_get_current_user();
 
@@ -153,8 +158,14 @@ class SocialProfile
                     $app_id,
                     $app_secret
                 );
-                $token = $pinterest->auth->getOAuthToken($code, WPSP_SOCIAL_OAUTH2_TOKEN_MIDDLEWARE);
-                $pinterest->auth->setOAuthToken($token->access_token);
+                if(empty($access_token) && !empty($code)){
+                    $token         = $pinterest->auth->getOAuthToken($code, $redirectURI);
+                    $access_token  = $token->access_token;
+                    $refresh_token = $token->refresh_token;
+                    $expires_in    = time() + $token->expires_in;
+                    $rt_expires_in = time() + $token->refresh_token_expires_in;
+                }
+                $pinterest->auth->setOAuthToken($access_token);
                 $userinfo = $pinterest->users->me();
 
                 $info = array(
@@ -166,7 +177,11 @@ class SocialProfile
                     'account_type'  => $userinfo->account_type,
                     'thumbnail_url' => $userinfo->profile_image,
                     'status'        => true,
-                    'access_token'  => $token->access_token,
+                    'redirectURI'   => $redirectURI,
+                    'access_token'  => $access_token,
+                    'refresh_token' => $refresh_token,
+                    'expires_in'    => $expires_in,
+                    'rt_expires_in' => $rt_expires_in,
                     'added_by'      => $current_user->user_login,
                     'added_date'    => current_time('mysql')
                 );
@@ -205,27 +220,33 @@ class SocialProfile
             }
         } else if ($type == 'linkedin') {
             try {
+                $app_id = $app_id ? $app_id : WPSP_SOCIAL_OAUTH2_LINKEDIN_APP_ID;
                 $linkedin = new LinkedIn(
                     $app_id,
                     $app_secret,
-                    WPSP_SOCIAL_OAUTH2_TOKEN_MIDDLEWARE,
+                    $redirectURI,
                     WPSCP_LINKEDIN_SCOPE,
                     true,
                     null
                 );
-                $acessToken = $linkedin->getAccessToken($code);
-                $getPerson = $linkedin->getPerson($acessToken);
+                if(empty($access_token) && !empty($code)){
+                    $accessToken = $linkedin->getAccessToken($code);
+                    $access_token = $accessToken->access_token;
+                }
+                $getPerson = $linkedin->getPerson($access_token);
 
                 $image = $getPerson->profilePicture->{'displayImage~'}->elements[0]->identifiers[0]->identifier;
                 $info = array(
-                    'id' => $getPerson->id,
-                    'app_id' => $app_id,
-                    'app_secret' => $app_secret,
-                    'name' => $getPerson->firstName->localized->en_US . " " . $getPerson->lastName->localized->en_US,
+                    'id'            => $getPerson->id,
+                    'app_id'        => $app_id,
+                    'app_secret'    => $app_secret,
+                    'name'          => $getPerson->firstName->localized->en_US . " " . $getPerson->lastName->localized->en_US,
                     'thumbnail_url' => $image,
-                    'status' => true,
-                    'access_token' => $acessToken,
-                    'added_by' => $current_user->user_login,
+                    'status'        => true,
+                    'redirectURI'   => $redirectURI,
+                    'access_token'  => $access_token,
+                    'expires_in'    => $expires_in,
+                    'added_by'      => $current_user->user_login,
                     'added_date'    => current_time('mysql')
                 );
                 // if app id is exists then app secret, redirect uri will be also there, it will be delete after approve real app
@@ -299,7 +320,7 @@ class SocialProfile
                 );
                 wp_send_json($response);
                 wp_die();
-            } catch (\Exception $e) {
+            } catch (\Exception $error) {
                 wp_send_json_error($error->getMessage());
                 wp_die();
             }
@@ -308,7 +329,7 @@ class SocialProfile
                 $tempAccessToken = $this->facebookGetAccessTokenDetails(
                     $app_id,
                     $app_secret,
-                    WPSP_SOCIAL_OAUTH2_TOKEN_MIDDLEWARE,
+                    $redirectURI,
                     $code
                 );
 
@@ -358,7 +379,7 @@ class SocialProfile
                                 'thumbnail_url' => $group->picture->data->url,
                                 'type' => 'group',
                                 'status' => true,
-                                'access_token' => $userAcessToken,
+                                'access_token' => $access_token,
                                 'added_by' => $current_user->user_login,
                                 'added_date'    => current_time('mysql')
                             ));
@@ -392,6 +413,7 @@ class SocialProfile
         $type = (isset($_POST['type']) ? $_POST['type'] : '');
         $app_id = (isset($_POST['appId']) ? $_POST['appId'] : '');
         $app_secret = (isset($_POST['appSecret']) ? $_POST['appSecret'] : '');
+        $redirectURI = (isset($_POST['redirectURI']) ? $_POST['redirectURI'] : '');
 
 
         if ($type == 'pinterest') {
@@ -402,14 +424,14 @@ class SocialProfile
             try {
                 $request['redirect_URI'] = esc_url(admin_url('/admin.php?page=' . WPSP_SETTINGS_SLUG));
                 $pinterest = new Pinterest(
-                    $app_id,
-                    $app_secret
+                    $app_id ? $app_id : WPSP_SOCIAL_OAUTH2_PINTEREST_APP_ID,
+                    $app_secret // unnecessary
                 );
                 // state
                 if (is_array($request)) {
                     $pinterest->auth->setState(json_encode($request));
                 }
-                $loginurl = $pinterest->auth->getLoginUrl(WPSP_SOCIAL_OAUTH2_TOKEN_MIDDLEWARE, array('boards:read', 'boards:write', 'pins:read', 'pins:write', 'user_accounts:read'));
+                $loginurl = $pinterest->auth->getLoginUrl($redirectURI, array('boards:read', 'boards:write', 'pins:read', 'pins:write', 'user_accounts:read'));
                 wp_send_json_success($loginurl);
                 wp_die();
             } catch (\Exception $error) {
@@ -425,9 +447,9 @@ class SocialProfile
                 $request['redirect_URI'] = esc_url(admin_url('/admin.php?page=' . WPSP_SETTINGS_SLUG));
                 $state = base64_encode(json_encode($request));
                 $linkedin = new LinkedIn(
-                    $app_id,
-                    $app_secret,
-                    WPSP_SOCIAL_OAUTH2_TOKEN_MIDDLEWARE,
+                    $app_id ? $app_id : WPSP_SOCIAL_OAUTH2_LINKEDIN_APP_ID,
+                    $app_secret,  // unnecessary
+                    $redirectURI,
                     WPSCP_LINKEDIN_SCOPE,
                     true,
                     $state
@@ -449,7 +471,7 @@ class SocialProfile
                     $app_id,
                     $app_secret
                 );
-                $oauth_callback = WPSP_SOCIAL_OAUTH2_TOKEN_MIDDLEWARE . '?' . http_build_query($request);
+                $oauth_callback = $redirectURI . '?' . http_build_query($request);
                 $request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => $oauth_callback));
                 $url = $connection->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
                 wp_send_json_success($url);
@@ -467,7 +489,7 @@ class SocialProfile
                 $request['redirect_URI'] = esc_url(admin_url('/admin.php?page=' . WPSP_SETTINGS_SLUG));
                 $state = base64_encode(json_encode($request));
                 $url = "https://www.facebook.com/dialog/oauth?client_id="
-                    . $app_id . "&redirect_uri=" . urlencode(WPSP_SOCIAL_OAUTH2_TOKEN_MIDDLEWARE) . "&state="
+                    . $app_id . "&redirect_uri=" . urlencode($redirectURI) . "&state="
                     . $state . "&scope=" . WPSCP_FACEBOOK_SCOPE;
                 wp_send_json_success($url);
                 wp_die();

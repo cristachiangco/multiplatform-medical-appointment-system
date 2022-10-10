@@ -145,7 +145,7 @@ class BetterDocs_Elementor
         require_once BETTERDOCS_DIR_PATH . 'includes/elementor/betterdocs-doc-archive.php';
         require_once BETTERDOCS_DIR_PATH . 'includes/elementor/betterdocs-archive-condition.php';
         require_once BETTERDOCS_DIR_PATH . 'includes/elementor/docs-page.php';
-        self::_register_tag();
+	    add_action( 'elementor/dynamic_tags/register', [ __CLASS__, '_register_tag' ] );
 
         //load widget file
         foreach (self::get_theme_builder_widget_list() as $key => $value) {
@@ -215,11 +215,10 @@ class BetterDocs_Elementor
         }
     }
 
-    public static function _register_tag()
+	public static function _register_tag( $module )
     {
         require_once BETTERDOCS_DIR_PATH . 'includes/elementor/widgets/betterdocs-elementor-title-tag.php';
 
-        $module = Plugin::elementor()->dynamic_tags;
         $module->register(new BetterDocs_Elementor_Title_Tag());
     }
 
@@ -898,7 +897,7 @@ class BetterDocs_Elementor
                         } else {
                             $html .= '<i class="' . $settings['list_icon']['value'] . ' el-betterdocs-cg-post-list-icon"></i>';
                         }
-                        $html .= '<a ' . implode(' ', $sub_attr) . '>' . esc_html(get_the_title()) . '</a></li>';
+                        $html .= '<a ' . implode(' ', $sub_attr) . '>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</a></li>';
                     endwhile;
                 endif;
                 wp_reset_query();

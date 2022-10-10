@@ -228,9 +228,10 @@ class BetterDocs_Customizer_Alpha_Color_Control extends WP_Customize_Control {
 class BetterDocs_Separator_Custom_Control extends WP_Customize_Control{
 	public $type = 'separator';
 	public function render_content(){
+		$custom_class = isset( $this->input_attrs['class'] ) ? ' '.$this->input_attrs['class'] : '';
 		?>
 		<label>
-			<h4 class="betterdocs-customize-control-separator"><?php echo esc_html( $this->label ); ?></h4>
+			<h4 class="betterdocs-customize-control-separator<?php echo $custom_class; ?>"><?php echo esc_html( $this->label ); ?></h4>
 			<?php if ( ! empty( $this->description ) ) : ?>
 			<span class="description customize-control-description"><?php echo $this->description; ?></span>
 			<?php endif; ?>
@@ -445,7 +446,7 @@ class BetterDocs_Radio_Image_Control extends WP_Customize_Control {
 				<?php } else { ?>
 				<input class="image-select" type="radio" value="<?php echo esc_attr( $value ) ?>" id="<?php echo $this->id . $value; ?>" name="<?php echo esc_attr( $name ) ?>" <?php $this->link(); checked( $this->value(), $value ); ?>>
 					<label for="<?php echo $this->id . $value; ?>">
-						<img src="<?php echo esc_url( $label['image'] ) ?>" alt="<?php echo esc_attr( $value ) ?>" title="<?php echo esc_attr( $value ) ?>">
+						<img src="<?php echo esc_url( $label['image'] ) ?>" alt="<?php echo esc_attr( $value ) ?>" title="<?php echo isset( $label['label'] ) ? esc_attr( $label['label'] ) : '' ; ?>">
 					</label>
 				</input>
 			<?php } endforeach; ?>

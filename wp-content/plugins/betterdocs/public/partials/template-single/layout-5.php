@@ -40,27 +40,8 @@ $htags = implode(',', $supported_tag);
             <?php
             $enable_sidebar_cat_list = BetterDocs_DB::get_settings('enable_sidebar_cat_list');
             if($enable_sidebar_cat_list == 1){
-            ?>
-            <aside  id="betterdocs-sidebar-left" class="betterdocs-full-sidebar-left">
-                <div data-simplebar class="betterdocs-sidebar-content betterdocs-category-sidebar">
-                    <?php
-                    $output = betterdocs_generate_output();
-                    $terms_orderby = BetterDocs_DB::get_settings('terms_orderby');
-                    $terms_order   = BetterDocs_DB::get_settings('terms_order');
-                    if (BetterDocs_DB::get_settings('alphabetically_order_term') == 1) {
-                        $terms_orderby = 'name';
-                    }
-                    $multiple_kb = intval(BetterDocs_DB::get_settings('multiple_kb'));
-                    if ( $multiple_kb == 1 ) {
-                        $shortcode = do_shortcode( '[betterdocs_category_grid  terms_order="'.$terms_order.'" terms_orderby="'.esc_html($terms_orderby).'" title_tag="'.BetterDocs_Helper::html_tag($output['betterdocs_sidebar_title_tag']).'" icon=0 post_counter=0 sidebar_list="true" posts_per_grid="-1" multiple_knowledge_base=true]' );
-                    } else {
-                        $shortcode = do_shortcode( '[betterdocs_category_grid  terms_order="'.$terms_order.'" terms_orderby="'.esc_html($terms_orderby).'" title_tag="'.BetterDocs_Helper::html_tag($output['betterdocs_sidebar_title_tag']).'" icon=0 post_counter=0 sidebar_list="true" posts_per_grid="-1"]' );
-                    }
-                    echo apply_filters( 'betterdocs_sidebar_category_shortcode', $shortcode, $terms_orderby, $terms_order);
-                    ?>
-                </div>
-            </aside><!-- #sidebar -->
-            <?php } ?>
+                include BETTERDOCS_PUBLIC_PATH . 'partials/sidebars/sidebar-5.php';    
+            } ?>
             <div id="betterdocs-single-main" class="docs-content-full-main">
                 <div class="docs-single-main">
                     <div class="doc-single-content-wrapper">
@@ -78,9 +59,8 @@ $htags = implode(',', $supported_tag);
                                     <div class="docs-single-title">
                                         <?php
                                         if ( is_single() ) {
-                                            echo '<'.BetterDocs_Helper::html_tag($output['betterdocs_post_title_tag']).' id="betterdocs-entry-title" class="betterdocs-entry-title">';
-                                            echo esc_html(get_the_title());
-                                            echo '</'.BetterDocs_Helper::html_tag($output['betterdocs_post_title_tag']).'>';
+                                            $output = betterdocs_generate_output();
+                                            the_title( '<'.BetterDocs_Helper::html_tag($output['betterdocs_post_title_tag']).' id="betterdocs-entry-title" class="betterdocs-entry-title">', '</'.BetterDocs_Helper::html_tag($output['betterdocs_post_title_tag']).'>' );
                                         }
                                         ?>
                                     </div>
@@ -177,9 +157,15 @@ $htags = implode(',', $supported_tag);
                         <?php }
                         $enable_comment = BetterDocs_DB::get_settings('enable_comment');
                         if ($enable_comment == 1) {
-                            if ( comments_open() || get_comments_number() ) :
-                                comments_template();
-                            endif;
+                            if (function_exists('wp_is_block_theme') && wp_is_block_theme()) { 
+                                if( comments_open() || get_comments_number() ) {
+                                    echo do_blocks('<!-- wp:post-comments /-->');
+                                }
+                            } else {
+                                if ( comments_open() || get_comments_number() ){
+                                    comments_template();
+                                }
+                            }
                         }
                         ?>
                     </div>

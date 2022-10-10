@@ -66,7 +66,7 @@ if ($showList) {
             $html .= '<li>';
 
             $html .= '<i class="' . esc_attr($listIcon) . ' el-betterdocs-cg-post-list-icon"></i>';
-            $html .= '<a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a>
+            $html .= '<a ' . implode(' ', $attr) . '>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</a>
                     </li>';
         }
         $html .= '</ul>';

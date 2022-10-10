@@ -56,10 +56,8 @@ function betterdocs_category_grid($atts, $content = null)
 	$column_val          = '';
 	$masonry_layout      = BetterDocs_DB::get_settings('masonry_layout');
 	$alphabetic_order    = BetterDocs_DB::get_settings('alphabetically_order_post');
-	$nested_subcategory  = intval( BetterDocs_DB::get_settings('nested_subcategory') );
 	$column_number       = BetterDocs_DB::get_settings('column_number');
 	$posts_number        = BetterDocs_DB::get_settings('posts_number');
-	$post_count          = BetterDocs_DB::get_settings('post_count');
 	$exploremore_btn     = BetterDocs_DB::get_settings('exploremore_btn');
 	$exploremore_btn_txt = BetterDocs_DB::get_settings('exploremore_btn_txt');
 	$get_args = shortcode_atts(
@@ -69,12 +67,12 @@ function betterdocs_category_grid($atts, $content = null)
 			'category'                 => 'doc_category',
 			'orderby'                  => BetterDocs_DB::get_settings('alphabetically_order_post'),
             'order'                    => BetterDocs_DB::get_settings('docs_order'),
-			'post_counter'             => true,
+			'post_counter'             => BetterDocs_DB::get_settings('post_count') != 'off' ? 'true' : 'false',
 			'icon'                     => true,
 			'masonry'                  => '',
 			'column'                   => '',
 			'posts_per_grid'           => '',
-			'nested_subcategory'       => '',
+			'nested_subcategory'       => BetterDocs_DB::get_settings('nested_subcategory') != 'off' ? 'true' : 'false',
 			'terms'                    => '',
             'terms_orderby'            => '',
             'terms_order'              => '',
@@ -86,11 +84,10 @@ function betterdocs_category_grid($atts, $content = null)
 		$atts
 	);
 
-	$post_counter_check       = ( $get_args['post_counter'] == 'true' ) ? true : false;
+	$post_counter       	  = ( $get_args['post_counter'] == 'true' ) ? true : false;
 	$post_icon_check          = ( $get_args['icon'] == 'true' ) ? true : false;
 	$masonry_check            = ( $get_args['masonry'] == 'true' ) ? true : false;
-	$nested_subcategory_check = ( $get_args['nested_subcategory'] == 'true' || $get_args['nested_subcategory'] == '' ) ? true : false;
-    $nested_subcategory       = ( $nested_subcategory == 1 && $nested_subcategory_check  != false ) || ($nested_subcategory_check  == true && $nested_subcategory  == 1);
+    $nested_subcategory       =  $get_args['nested_subcategory'] === 'true' ? true : false;
     $masonry = ($masonry_layout == 1 && $masonry_check   == '') || ($masonry_check == true && $masonry_check != "false");
 	$taxonomy_objects = BetterDocs_Helper::taxonomy_object($get_args['multiple_knowledge_base'], $get_args['terms'], $get_args['terms_order'], $get_args['terms_orderby'], $get_args['kb_slug'], $nested_subcategory);
     if ($taxonomy_objects && !is_wp_error($taxonomy_objects)) {
@@ -185,7 +182,7 @@ function betterdocs_category_grid($atts, $content = null)
 									echo '<div class="docs-cat-title">' . $cat_icon . '<a href="' . esc_url($term_permalink) . '"><'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .' class="docs-cat-heading">' . $term->name . '</'. BetterDocs_Helper::validate_html_tag($get_args['title_tag']) .'></a></div>';
 								}
 
-								if ($post_count == 1 && $post_counter_check == true) {
+								if ( $post_counter === true ) {
 									echo '<div class="docs-item-count"><span>' . $term_count . '</span></div>';
 								}
 
@@ -211,7 +208,7 @@ function betterdocs_category_grid($atts, $content = null)
 									if ($page_cat === get_the_ID() && BetterDocs_Helper::get_tax() != 'doc_category') {
 										$attr[] = 'class="active"';
 									}
-									echo '<li>' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a></li>';
+									echo '<li>' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $attr) . '>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</a></li>';
 								endwhile;
 								echo '</ul>';
 							endif;
@@ -278,7 +275,7 @@ function betterdocs_category_grid($atts, $content = null)
 						echo '<ul>';
 						while ($post_query->have_posts()) : $post_query->the_post();
 							$attr = ['href="' . get_the_permalink() . '"'];
-							echo '<li>' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a></li>';
+							echo '<li>' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $attr) . '>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</a></li>';
 						endwhile;
 						echo '</ul>';
 					endif;
@@ -287,6 +284,7 @@ function betterdocs_category_grid($atts, $content = null)
 			</div>
 		</div>';
 		}
+		
         if ($masonry == true ) {
             $output = betterdocs_generate_output();
             echo '<script>
@@ -336,7 +334,7 @@ function betterdocs_category_grid($atts, $content = null)
 						if ($page_cat === get_the_ID() && BetterDocs_Helper::get_tax() != 'doc_category') {
 							$sub_attr[] = 'class="active"';
 						}
-						echo '<li class="sub-list">' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $sub_attr) . '>' . esc_html(get_the_title()) . '</a></li>';
+						echo '<li class="sub-list">' . BetterDocs_Helper::list_svg() . '<a ' . implode(' ', $sub_attr) . '>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</a></li>';
 					endwhile;
 				endif;
 				wp_reset_query();
@@ -449,7 +447,7 @@ function betterdocs_category_grid($atts, $content = null)
                                     if ($page_cat === get_the_ID()) {
                                         $attr[] = 'class="active"';
                                     }
-                                    echo '<li><a ' . implode(' ', $attr) . '>' . esc_html(get_the_title()) . '</a></li>';
+                                    echo '<li><a ' . implode(' ', $attr) . '>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</a></li>';
                                 endwhile;
 
                                 echo '</ul>';
@@ -727,7 +725,7 @@ function betterdocs_get_search_result() {
 			} elseif ($search_result_image == 1 && !empty($first_img)) {
 				$icon = '<img src="' . $first_img . '" alt="">';
 			}
-			$output .= '<li>' . $icon . '<a href="' . get_permalink() . '"><span class="betterdocs-search-title">' . esc_html(get_the_title()) . '</span><br><span class="betterdocs-search-category">' . $all_terms . '</span></a></li>';
+			$output .= '<li>' . $icon . '<a href="' . get_permalink() . '"><span class="betterdocs-search-title">' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</span><br><span class="betterdocs-search-category">' . $all_terms . '</span></a></li>';
 		endwhile;
 	else :
         $input_not_found = $search_input;

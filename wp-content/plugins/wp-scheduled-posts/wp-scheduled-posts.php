@@ -2,7 +2,7 @@
 /*
  * Plugin Name: SchedulePress (Formerly Known as WP Scheduled Posts)
  * Description: Automate your content workflow with SchedulePress. Take a quick glance at your content planning with Schedule Calendar, Dashboard widget & Sitewide admin bar. Instantly share your posts on social media platforms such as Facebook, Twitter & many more.
- * Version: 4.1.8
+ * Version: 4.2.0
  * Author: WPDeveloper
  * Author URI: https://wpdeveloper.com
  * Text Domain: wp-scheduled-posts
@@ -46,7 +46,7 @@ final class WPSP
 		/**
 		 * Defines CONSTANTS for Whole plugins.
 		 */
-		define('WPSP_VERSION', '4.1.8');
+		define('WPSP_VERSION', '4.2.0');
 		define('WPSP_SETTINGS_NAME', 'wpsp_settings');
 		define('WPSP_PLUGIN_FILE', __FILE__);
 		define('WPSP_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -63,6 +63,9 @@ final class WPSP
 		define('WPSCP_ADMIN_DIR_PATH', WPSP_ROOT_DIR_PATH . '/includes/Admin/');
 		// Midleware
 		define('WPSP_SOCIAL_OAUTH2_TOKEN_MIDDLEWARE', 'https://api.schedulepress.com/callback.php');
+		define('WPSP_SOCIAL_OAUTH2_PINTEREST_APP_ID', '1477330');
+		define('WPSP_SOCIAL_OAUTH2_LINKEDIN_APP_ID', '868kqwob6sft7b');
+
 	}
 
 	/**

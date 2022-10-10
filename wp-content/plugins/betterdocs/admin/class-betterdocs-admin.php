@@ -80,6 +80,12 @@ class BetterDocs_Admin
 		$this->metabox = new BetterDocs_MetaBox();
 		self::$settings = BetterDocs_DB::get_settings();
 		add_action('wp_ajax_betterdocs_dark_mode', array($this, 'dark_mode'));
+		add_action('wp_ajax_update_doc_cat_order', array($this, 'update_doc_cat_order'));
+		add_action('wp_ajax_update_doc_order_by_category', array($this, 'update_doc_order_by_category'));
+		add_action('wp_ajax_update_docs_term', array($this, 'update_docs_term'));
+		add_action('save_post_docs', array($this, 'update_new_post_doc_order_by_category'));
+		add_filter('betterdocs_articles_args', array($this, 'docs_args'), 11, 2);
+		add_action('new_to_auto-draft', array($this, 'auto_add_category'));
 	}
 
 	/**
@@ -98,12 +104,8 @@ class BetterDocs_Admin
 		);
 
 		$tax = function_exists('get_current_screen') ? get_current_screen() : '';
-		if (!in_array($hook, array('toplevel_page_betterdocs-admin', 'betterdocs_page_betterdocs-settings', 'betterdocs_page_betterdocs-analytics'))) {
-			if ($tax->taxonomy !== 'doc_category') {
-				return;
-			} else {
-				return;
-			}
+		if (!in_array($hook, array('toplevel_page_betterdocs-admin', 'betterdocs_page_betterdocs-settings', 'betterdocs_page_betterdocs-analytics')) && $tax->taxonomy !== 'doc_category') {
+			return;
 		}
 
 		wp_enqueue_style(
@@ -156,12 +158,9 @@ class BetterDocs_Admin
 		);
 
 		$tax = function_exists('get_current_screen') ? get_current_screen() : '';
-		if (!in_array($hook, array('toplevel_page_betterdocs-admin', 'betterdocs_page_betterdocs-settings', 'betterdocs_page_betterdocs-analytics', 'betterdocs_page_betterdocs-setup'))) {
-			if ($tax->taxonomy !== 'doc_category') {
-				return;
-			} else {
-				return;
-			}
+
+		if (!in_array($hook, array('toplevel_page_betterdocs-admin', 'betterdocs_page_betterdocs-settings', 'betterdocs_page_betterdocs-analytics', 'betterdocs_page_betterdocs-setup')) && $tax->taxonomy !== 'doc_category') {
+			return;
 		}
 
 		wp_enqueue_script('wp-color-picker');
@@ -430,5 +429,180 @@ class BetterDocs_Admin
 				)
 			);
 		}
+	}
+
+	/**
+	 * Auto Add in Category, Adding from Sorting
+	 *
+	 * @param WP_Post $post
+	 * @return void
+	 */
+	public function auto_add_category($post)
+	{
+		if (!strpos($_SERVER['REQUEST_URI'], 'wp-admin/post-new.php')) {
+			return;
+		}
+		if (empty($_GET['cat'])) {
+			return;
+		}
+		$cat = wp_unslash($_GET['cat']);
+		if (false === ($cat = get_term_by('term_id', $cat, 'doc_category'))) {
+			return;
+		}
+		wp_set_post_terms($post->ID, array($cat->term_id), 'doc_category', false);
+	}
+
+	/**
+	 *
+	 * AJAX Handler to update terms' tax position.
+	 *
+	 */
+	public function update_doc_cat_order()
+	{
+		if (!check_ajax_referer('doc_cat_order_nonce', 'doc_cat_order_nonce', false)) {
+			wp_send_json_error();
+		}
+
+		$taxonomy_ordering_data = filter_var_array(wp_unslash($_POST['taxonomy_ordering_data']), FILTER_SANITIZE_NUMBER_INT);
+		$base_index             = filter_var(wp_unslash($_POST['base_index']), FILTER_SANITIZE_NUMBER_INT);
+
+		foreach ($taxonomy_ordering_data as $order_data) {
+			if ($base_index > 0) {
+				$current_position = get_term_meta($order_data['term_id'], 'doc_category_order', true);
+
+				if ((int) $current_position < (int) $base_index) {
+					continue;
+				}
+			}
+			update_term_meta($order_data['term_id'], 'doc_category_order', ((int) $order_data['order'] + (int) $base_index));
+		}
+		wp_send_json_success();
+	}
+
+	/**
+	 * AJAX Handler to update docs position.
+	 */
+	public function update_doc_order_by_category()
+	{
+		if (!check_ajax_referer('doc_cat_order_nonce', 'doc_cat_order_nonce', false)) {
+			wp_send_json_error();
+		}
+
+		$docs_ordering_data = filter_var_array(wp_unslash($_POST['docs_ordering_data']), FILTER_SANITIZE_NUMBER_INT);
+		$term_id = intval($_POST['list_term_id']);
+
+		if (!$term_id) {
+			wp_send_json_error();
+		}
+
+		if (update_term_meta($term_id, '_docs_order', implode(',', $docs_ordering_data))) {
+			wp_send_json_success();
+		}
+	}
+
+	/**
+	 * AJAX Handler to update docs position.
+	 */
+	public function update_docs_term()
+	{
+		if (!check_ajax_referer('doc_cat_order_nonce', 'doc_cat_order_nonce', false)) {
+			wp_send_json_error();
+		}
+
+		$object_id = intval($_POST['object_id']);
+		$term_id = intval($_POST['list_term_id']);
+		$prev_term_id = intval(isset($_POST['prev_term_id']) ? $_POST['prev_term_id'] : 0);
+
+		if (!$term_id || !$object_id) {
+
+			wp_send_json_error();
+		}
+
+		global $wpdb;
+
+		if ($prev_term_id) {
+
+			wp_remove_object_terms($object_id, $prev_term_id, 'doc_category');
+		}
+
+		$terms_added = wp_set_object_terms($object_id, $term_id, 'doc_category');
+
+		if (!is_wp_error($terms_added)) {
+
+			wp_send_json_success();
+		}
+
+		wp_send_json_error();
+	}
+
+	/**
+	 * Update docs_term meta when new post created
+	 */
+
+	public function update_new_post_doc_order_by_category( $post_id )
+	{
+		$term_list = wp_get_post_terms($post_id, 'doc_category', array('fields' => 'ids'));
+
+		if (!empty($term_list)) {
+			foreach ($term_list as $term_id) {
+				$term = get_term($term_id, 'doc_category');
+				$term_slug = $term->slug;
+				$term_meta = get_term_meta($term_id, '_docs_order');
+				if (!empty($term_meta)) {
+					$term_meta_arr = explode(",", $term_meta[0]);
+
+					if (!in_array($post_id, $term_meta_arr)) {
+						array_unshift($term_meta_arr, $post_id);
+						$docs_ordering_data = filter_var_array(wp_unslash($term_meta_arr), FILTER_SANITIZE_NUMBER_INT);
+						$val = implode(',', $docs_ordering_data);
+						update_term_meta($term_id, '_docs_order', implode(',', $docs_ordering_data));
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 *
+	 * Update docs query arguments
+	 *
+	 */
+
+	public function docs_args($args, $term_id = null)
+	{	
+		if (is_null($term_id) || isset($args['orderby'])) {
+			return $args;
+		}
+		
+		$docs_order = get_term_meta($term_id, '_docs_order', true);
+
+		global $wpdb;
+
+		if (!empty($docs_order)) {
+
+			$docs_order = explode(',', $docs_order);
+
+			$new_ids = [];
+			$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}term_relationships WHERE term_taxonomy_id = $term_id");
+
+			if (!is_null($results) && !empty($results) && is_array($results)) {
+
+				$object_ids = array_filter($results, function ($value) use ($docs_order) {
+					return !in_array($value->object_id, $docs_order);
+				});
+
+				if (!empty($object_ids)) {
+
+					array_walk($object_ids, function ($value) use (&$new_ids) {
+						$new_ids[] = $value->object_id;
+					});
+				}
+			}
+
+			$args['orderby'] = 'post__in';
+			$args['post__in'] = array_merge($new_ids, $docs_order);
+		}
+
+		return $args;
 	}
 }

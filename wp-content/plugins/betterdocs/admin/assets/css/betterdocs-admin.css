@@ -669,6 +669,18 @@ label.betterdocs-adv-checkbox-label:hover {
     position: relative;
     display: none;
 }
+
+.betterdocs-tab-content {
+    display: none;
+}
+.betterdocs-tab-content.active {
+    display: block;
+}
+.betterdocs-list-grid-icon {
+    display: flex;
+    margin-left: auto;
+}
+
 .betterdocs-analytics-teaser .betterdocs-settings-tab {
     position: relative;
 }
@@ -1964,7 +1976,7 @@ body.toplevel_page_betterdocs-admin {
     border-radius: 90px;
     height: 34px;
     padding: 0 5px;
-    margin-left: auto;
+    margin-left: 10px;
 }
 .betterdocs-switch-mode label {
     display: flex;
@@ -2418,4 +2430,18 @@ body.betterdocs-dark-mode .betterdocs-listing-table-content .tablenav-pages .pag
 .betterdocs-control-wrapper #copy-clipboard:hover span {
     opacity: 1;
     visibility: visible;
+}
+.taxonomy-doc_category #the-list tr:hover {
+    cursor: -webkit-grab; 
+    cursor: -moz-grab;
+}
+
+.taxonomy-doc_category #the-list tr.ui-sortable-helper:hover {
+    display: table;
+    cursor: -webkit-grabbing; 
+    cursor: -moz-grabbing;
+}
+
+.taxonomy-doc_category #the-list tr.no-items:hover {
+    cursor: default;
 }

@@ -481,20 +481,24 @@ class BetterDocs_Docs_Post_Type
         </div>
 
         <div class="form-field term-group">
-            <label for="doc-category-image-id">' . esc_html__('Category Icon', 'betterdocs') . '</label>
-            <input type="hidden" id="doc-category-image-id" name="term_meta[image-id]" class="custom_media_url" value="">
-            <div id="doc-category-image-wrapper">
+            <label>' . esc_html__('Category Icon', 'betterdocs') . '</label>
+            <input type="hidden" name="term_meta[image-id]" class="doc-category-image-id" value="">
+            <div class="doc-category-image-wrapper">
                 <img src="' . BETTERDOCS_ADMIN_URL . 'assets/img/betterdocs-cat-icon.svg" alt="">
             </div>
             <p>
-                <input type="button" class="button button-secondary betterdocs_tax_media_button"
-                    id="betterdocs_tax_media_button" name="betterdocs_tax_media_button"
+                <input type="button" id="betterdocs_tax_media_button" 
+                    class="button button-secondary betterdocs_tax_media_button" 
+                    name="betterdocs_tax_media_button"
                     value="' . esc_html__('Add Image', 'betterdocs') . '" />
-                <input type="button" class="button button-secondary doc_tax_media_remove" id="doc_tax_media_remove"
+                <input type="button" 
+                    id="doc_tax_media_remove"
+                    class="button button-secondary doc_tax_media_remove"
                     name="doc_tax_media_remove"
                     value="' . esc_html__('Remove Image', 'betterdocs') . '" />
             </p>
         </div>';
+        do_action('betterdocs_doc_category_add_form_after');
     }
 
     /**
@@ -533,9 +537,7 @@ class BetterDocs_Docs_Post_Type
         $cat_icon_id = get_term_meta($term->term_id, 'doc_category_image-id', true);
 
         do_action('betterdocs_doc_category_update_form_before', $term);
-
         ?>
-
         <tr class="form-field term-group-wrap">
             <th scope="row">
                 <label for="doc-category-id"><?php esc_html_e('Category Id', 'betterdocs'); ?></label>
@@ -554,11 +556,11 @@ class BetterDocs_Docs_Post_Type
         </tr>
         <tr class="form-field term-group-wrap batterdocs-cat-media-upload">
             <th scope="row">
-                <label for="doc-category-image-id"><?php esc_html_e('Image', 'betterdocs'); ?></label>
+                <label><?php esc_html_e('Category Icon', 'betterdocs'); ?></label>
             </th>
             <td>
-                <input type="hidden" id="doc-category-image-id" name="term_meta[image-id]" value="<?php echo esc_attr($cat_icon_id); ?>">
-                <div id="doc-category-image-wrapper">
+                <input type="hidden" class="doc-category-image-id" name="term_meta[image-id]" value="<?php echo esc_attr($cat_icon_id); ?>">
+                <div class="doc-category-image-wrapper" id="doc-category-image-wrapper">
                     <?php
                     if ($cat_icon_id) {
                         echo wp_get_attachment_image($cat_icon_id, 'thumbnail');
@@ -574,6 +576,7 @@ class BetterDocs_Docs_Post_Type
             </td>
         </tr>
         <?php
+        do_action('betterdocs_doc_category_update_form_after', $term);
     }
 
     /*
@@ -604,61 +607,64 @@ class BetterDocs_Docs_Post_Type
     */
     public static function add_script()
     {
-
         global $current_screen;
         if ($current_screen->id == 'edit-doc_category') {
-
         ?>
-            <script>
-                jQuery(document).ready(function($) {
+        <script>
+            jQuery(document).ready(function($) {
+                function betterdocs_media_upload(button_class) {
+                    var _custom_media = true,
+                        _betterdocs_send_attachment = wp.media.editor.send.attachment;
+                    $('body').on('click', button_class, function(e) {
+                        let button_id = '#' + $(this).attr('id');
+                        let send_attachment_bkp = wp.media.editor.send.attachment;
+                        let button = $(button_id);
+                        let imageId = $(this).parent().parent().find('.doc-category-image-id');
+                        let imageWrapper = $(this).parent().parent().find('.doc-category-image-wrapper');
 
-                    function betterdocs_media_upload(button_class) {
-                        var _custom_media = true,
-                            _betterdocs_send_attachment = wp.media.editor.send.attachment;
-                        $('body').on('click', button_class, function(e) {
-                            var button_id = '#' + $(this).attr('id');
-                            var send_attachment_bkp = wp.media.editor.send.attachment;
-                            var button = $(button_id);
-                            _custom_media = true;
-                            wp.media.editor.send.attachment = function(props, attachment) {
-                                if (_custom_media) {
-                                    $('#doc-category-image-id').val(attachment.id);
-                                    $('#doc-category-image-wrapper').html(
-                                        '<img class="custom_media_image" src="" style="margin:0;padding:0;max-height:100px;float:none;" />'
-                                    );
-                                    $('#doc-category-image-wrapper .custom_media_image').attr('src', attachment
-                                        .url).css('display', 'block');
-                                } else {
-                                    return _betterdocs_send_attachment.apply(button_id, [props, attachment]);
-                                }
-                            }
-                            wp.media.editor.open(button);
-                            return false;
-                        });
-                    }
-
-                    betterdocs_media_upload('.betterdocs_tax_media_button.button');
-
-                    $('body').on('click', '.doc_tax_media_remove', function() {
-                        $('#doc-category-image-id').val('');
-                        $('#doc-category-image-wrapper').html(
-                            '<img class="custom_media_image" src="" style="margin:0;padding:0;max-height:100px;float:none;" />'
-                        );
-                    });
-
-                    $(document).ajaxComplete(function(event, xhr, settings) {
-                        var queryStringArr = settings.data.split('&');
-                        if ($.inArray('action=add-tag', queryStringArr) !== -1) {
-                            var xml = xhr.responseXML;
-                            $response = $(xml).find('term_id').text();
-                            if ($response != "") {
-                                // Clear the thumb image
-                                $('#doc-category-image-wrapper').html('');
+                        _custom_media = true;
+                        wp.media.editor.send.attachment = function(props, attachment) {
+                            if (_custom_media) {
+                                imageId.val(attachment.id);
+                                imageWrapper.html(
+                                    '<img class="custom_media_image" src="" style="margin:0;padding:0;max-height:100px;float:none;" />'
+                                );
+                                let custom_media_image = imageWrapper.find('.custom_media_image');
+                                custom_media_image.attr('src', attachment
+                                    .url).css('display', 'block');
+                            } else {
+                                return _betterdocs_send_attachment.apply(button_id, [props, attachment]);
                             }
                         }
+                        wp.media.editor.open(button);
+                        return false;
                     });
+                }
+
+                betterdocs_media_upload('.betterdocs_tax_media_button.button');
+
+                $('body').on('click', '.doc_tax_media_remove', function() {
+                    let imageId = $(this).parent().parent().find('.doc-category-image-id');
+                    let imageWrapper = $(this).parent().parent().find('.doc-category-image-wrapper');
+                    imageId.val('');
+                    imageWrapper.html(
+                        '<img class="custom_media_image" src="" style="margin:0;padding:0;max-height:100px;float:none;" />'
+                    );
                 });
-            </script>
+
+                $(document).ajaxComplete(function(event, xhr, settings) {
+                    var queryStringArr = settings.data.split('&');
+                    if ($.inArray('action=add-tag', queryStringArr) !== -1) {
+                        var xml = xhr.responseXML;
+                        $response = $(xml).find('term_id').text();
+                        if ($response != "") {
+                            // Clear the thumb image
+                            $('.doc-category-image-wrapper').html('');
+                        }
+                    }
+                });
+            });
+        </script>
 <?php }
     }
 

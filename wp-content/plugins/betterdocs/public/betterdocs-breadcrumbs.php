@@ -73,7 +73,7 @@ function betterdocs_breadcrumbs()
     } elseif ($docs_page) {
         $docs_page_url = get_page_link($docs_page);
         $docs_page_title = get_the_title($docs_page);
-        $docs_page = '<li class="betterdocs-breadcrumb-item item-cat item-custom-docs-page"><a class="bread-cat bread-custom-docs-page" href="' . esc_url($docs_page_url) . '" title="' . esc_attr($docs_page_title) . '">' . esc_html($docs_page_title) . '</a></li>';
+        $docs_page = '<li class="betterdocs-breadcrumb-item item-cat item-custom-docs-page"><a class="bread-cat bread-custom-docs-page" href="' . esc_url($docs_page_url) . '" title="' . esc_attr($docs_page_title) . '">' . wp_kses($docs_page_title, BETTERDOCS_KSES_ALLOWED_HTML) . '</a></li>';
     }
 
     // Get the query & post information
@@ -137,7 +137,7 @@ function betterdocs_breadcrumbs()
             // Check if the post is in a category
             if ($enable_breadcrumb_title == 1) {
                 echo '<li class="betterdocs-breadcrumb-item breadcrumb-delimiter"> ' . $delimiter . ' </li>';
-                echo '<li class="betterdocs-breadcrumb-item item-current item-' . $post->ID . ' current"><span>' . esc_html(get_the_title()) . '</span></li>';
+                echo '<li class="betterdocs-breadcrumb-item item-current item-' . $post->ID . ' current"><span>' . wp_kses(get_the_title(), BETTERDOCS_KSES_ALLOWED_HTML) . '</span></li>';
             }
         }
         echo '</ul>';

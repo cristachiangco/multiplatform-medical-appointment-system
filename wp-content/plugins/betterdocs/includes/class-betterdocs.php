@@ -387,6 +387,7 @@ class BetterDocs
 	{
 		$plugin_public = new BetterDocs_Public($this->get_plugin_name(), $this->get_version());
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'load_assets');
+//		$this->loader->add_action('enqueue_block_assets', $plugin_public, 'load_assets');
 	}
 
 	/**

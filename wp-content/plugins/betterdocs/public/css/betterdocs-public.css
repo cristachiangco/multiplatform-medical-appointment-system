@@ -1210,6 +1210,66 @@ a.close-toc {
   padding-right: 1px;
 }
 
+/*** Category Sidebar Layout 4 Css ***/
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-4{
+  max-width: 400px;
+  width: 30%;
+  padding: 0;
+}
+
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-4 .betterdocs-sidebar-content.betterdocs-category-sidebar .docs-single-cat-wrap .docs-cat-title-wrap.active-title{
+  background-color: transparent !important;
+	border: none !important;
+}
+
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-4 .betterdocs-sidebar-content.betterdocs-category-sidebar .betterdocs-categories-wrap.category-grid .docs-single-cat-wrap .docs-cat-title-wrap .docs-cat-title-inner .cat-list-arrow-down{
+  display: block;
+  height: 15px;
+  width: 15px;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-4 .betterdocs-sidebar-content.betterdocs-category-sidebar.betterdocs-height{
+  height: auto;
+}
+
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-4.betterdocs-background{
+  height: fit-content;
+}
+/*** Category Sidebar Layout 4 Css ***/
+
+/*** Category Sidebar Layout 5 Css ***/
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-5{
+  max-width: 400px;
+  width: 30%;
+  padding: 0;
+}
+
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-5 .betterdocs-sidebar-content.betterdocs-category-sidebar .docs-single-cat-wrap .docs-cat-title-wrap.active-title{
+  background-color: transparent !important;
+	border: none !important;
+}
+
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-5 .betterdocs-sidebar-content.betterdocs-category-sidebar .betterdocs-categories-wrap.category-grid .docs-single-cat-wrap .docs-cat-title-wrap .docs-cat-title-inner .cat-list-arrow-down{
+  display: block;
+  height: 15px;
+  width: 15px;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-5 .betterdocs-sidebar-content.betterdocs-category-sidebar.betterdocs-height{
+  height: auto;
+}
+
+.betterdocs-content-area .betterdocs-full-sidebar-left.sidebar-layout-5.betterdocs-background{
+  height: fit-content;
+}
+
+.betterdocs-content-area .sidebar-layout-5{
+  box-shadow: 0px 8px 20px rgb(0 1 35 / 10%);
+}
+/*** Category Sidebar Layout 5 Css ***/
+
 .betterdocs-full-sidebar-right {
   grid-column: 11 / span 2;
   border-left: 1px solid #eff2f7;
@@ -1784,3 +1844,4 @@ body.single-docs .site-content > .ast-container,
     padding-left: 0 !important;
   }
 }
+

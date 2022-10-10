@@ -188,7 +188,7 @@ class BetterDocs_Settings {
                 </li>
             </ul>
             <div class="analytics-upgrade-btn">
-                <a href="https://betterdocs.co/upgrade"><?php esc_html_e('Upgrade To BetterDocs PRO','betterdocs-pro') ?></a>
+                <a href="https://betterdocs.co/upgrade"><?php esc_html_e('Upgrade To BetterDocs PRO','betterdocs') ?></a>
             </div>
         </div>
         <?php
@@ -335,7 +335,7 @@ class BetterDocs_Settings {
         }
         $fields_keys = array_fill_keys( array_keys( $fields ), 'off' );
 
-        $builtin_doc_page = $new_posted_fields['builtin_doc_page'] ? $fields_keys['builtin_doc_page'] : '';
+        $builtin_doc_page = isset($new_posted_fields['builtin_doc_page']) ? $fields_keys['builtin_doc_page'] : '';
         $docs_slug = $new_posted_fields['docs_slug'];
         $docs_page = $new_posted_fields['docs_page'];
         if ($builtin_doc_page == 1 && $docs_slug) {

@@ -58,26 +58,37 @@ function betterdocs_customize_register( $wp_customize ) {
 			'priority' => 2,
 			'choices'		=> apply_filters('betterdocs_docs_layout_select_choices', array(
 				'layout-1' 	=> array(
+					'label' => esc_html__('Grid Layout', 'betterdocs'),
 					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/docs-layout-1.png',
 				),
 				'layout-2' 	=> array(
+					'label' => esc_html__('Box Layout', 'betterdocs'),
 					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/docs-layout-2.png',
 				),
 				'layout-3' 	=> array(
+					'label' => esc_html__('Card Layout', 'betterdocs'),
 					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/docs-layout-3.png',
 					'pro' => true,
 					'url' => 'https://betterdocs.co/upgrade',
 				),
 				'layout-4' 	=> array(
+					'label' => esc_html__('Modern Layout', 'betterdocs'),
 					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/docs-layout-4.png',
 					'pro' => true,
 					'url' => 'https://betterdocs.co/upgrade',
 				),
                 'layout-5' 	=> array(
+					'label' => esc_html__('Classic Layout', 'betterdocs'),
 					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/docs-layout-5.png',
 					'pro' => true,
 					'url' => 'https://betterdocs.co/upgrade',
 				),
+				'layout-6' => array(
+					'label' => esc_html__('Handbook Layout', 'betterdocs'),
+					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/docs-layout-6.png',
+					'pro' => true,
+					'url' => 'https://betterdocs.co/upgrade',
+				)
 			))
 		) )
 	);
@@ -2600,23 +2611,34 @@ function betterdocs_customize_register( $wp_customize ) {
 			'priority'   => 102,
 			'choices'		=> apply_filters('betterdocs_single_layout_select_choices', array(
 				'layout-1' 	=> array(
+					'label' => esc_html__('Classic Layout', 'betterdocs'),
 					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/single-layout-1.png',
 				),
                 'layout-4' 	=> array(
+					'label' => esc_html__('Abstract Layout', 'betterdocs'),
                     'image' => BETTERDOCS_ADMIN_URL . 'assets/img/single-layout-4.png',
-                    'pro' => false
+                    'pro' 	=> false
                 ),
                 'layout-5' 	=> array(
+					'label' => esc_html__('Modern Layout', 'betterdocs'),
                     'image' => BETTERDOCS_ADMIN_URL . 'assets/img/single-layout-5.png',
-                    'pro' => false
+                    'pro' 	=> false
                 ),
 				'layout-2' 	=> array(
+					'label' => esc_html__('Minimalist Layout', 'betterdocs'),
 					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/single-layout-2.png',
 					'pro' => true,
 					'url' => 'https://betterdocs.co/upgrade',
 				),
 				'layout-3' 	=> array(
+					'label' => esc_html__('Artisan Layout', 'betterdocs'),
 					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/single-layout-3.png',
+					'pro' => true,
+					'url' => 'https://betterdocs.co/upgrade',
+				),
+				'layout-6' 	=> array(
+					'label' => esc_html__('Bohemian Layout', 'betterdocs'),
+					'image' => BETTERDOCS_ADMIN_URL . 'assets/img/single-layout-6.png',
 					'pro' => true,
 					'url' => 'https://betterdocs.co/upgrade',
 				),
@@ -5649,11 +5671,67 @@ function betterdocs_customize_register( $wp_customize ) {
     );
 
 	// Archive Page
-
 	$wp_customize->add_section( 'betterdocs_archive_page_settings' , array(
-		'title'      => esc_html__('Archive Page','betterdocs'),
+		'title'      => esc_html__('Category Archive','betterdocs'),
 		'priority'   => 400
 	) );
+
+	/**
+	 * 
+	 * Archive Layout Select & This Controller Is Used To Change The Only Sidebar Layouts(1, 2, 3, 4, 5) Of Category Template Layout 1 
+	 * & This Controller Is Applied To Category Archive Layout 6 available in doc-category-templates/category-template-2.php(File)
+	 * 
+	 **/  
+	$wp_customize->add_setting( 'betterdocs_archive_layout_select' , array(
+		'default'     		=> $defaults['betterdocs_archive_layout_select'],
+		'capability'    	=> 'edit_theme_options',
+	    'sanitize_callback' => 'betterdocs_sanitize_select',
+	) );
+
+	$wp_customize->add_control(
+		new BetterDocs_Radio_Image_Control(
+			$wp_customize,
+			'betterdocs_archive_layout_select',
+			array(
+				'type'     		=> 'betterdocs-radio-image',
+				'settings'		=> 'betterdocs_archive_layout_select',
+				'section'		=> 'betterdocs_archive_page_settings',
+				'label'			=> esc_html__('Select Category Archive Layout', 'betterdocs'),
+				'choices'		=> apply_filters('betterdocs_archive_layout_choices', array(
+					'layout-1' 	=> array(
+						'label' => esc_html__('Classic Layout', 'betterdocs'),
+						'image' => BETTERDOCS_ADMIN_URL . 'assets/img/sidebar-layout-1.png',
+					),
+					'layout-4' 	=> array(
+						'label' => esc_html__('Abstract Layout', 'betterdocs'),
+						'image' => BETTERDOCS_ADMIN_URL . 'assets/img/sidebar-layout-4.png',
+					),
+					'layout-5' 	=> array(
+						'label' => esc_html__('Modern Layout', 'betterdocs'),
+						'image' => BETTERDOCS_ADMIN_URL . 'assets/img/sidebar-layout-5.png',
+					),
+					'layout-2' 	=> array(
+						'label' => esc_html__('Memphis Layout', 'betterdocs'),
+						'image' => BETTERDOCS_ADMIN_URL . 'assets/img/sidebar-layout-2.png',
+						'pro' => true,
+						'url' => 'https://betterdocs.co/upgrade',
+					),
+					'layout-3' 	=> array(
+						'label' => esc_html__('Neoclassic Layout', 'betterdocs'),
+						'image' => BETTERDOCS_ADMIN_URL . 'assets/img/sidebar-layout-3.png',
+						'pro' => true,
+						'url' => 'https://betterdocs.co/upgrade',
+					),
+					'layout-6' 	=> array(
+						'label' => esc_html__('Handbook Layout', 'betterdocs'),
+						'image' => BETTERDOCS_ADMIN_URL . 'assets/img/docs-cat-layout-6.png',
+						'pro' 	=> true,
+						'url' 	=> 'https://betterdocs.co/upgrade'
+					)
+				))
+			)
+		)
+	);
 
 	// Archive Background Color
 
@@ -5821,6 +5899,50 @@ function betterdocs_customize_register( $wp_customize ) {
 			'center center'   => esc_html__('center center', 'betterdocs'),
 			'center bottom'   => esc_html__('center bottom', 'betterdocs')
 		)
+	) ) );
+
+	// Content Area Width
+	$wp_customize->add_setting( 'betterdocs_archive_content_area_width', array(
+		'default'       	=> $defaults['betterdocs_archive_content_area_width'],
+		'capability'    	=> 'edit_theme_options',
+		'transport' 		=> 'postMessage',
+		'sanitize_callback' => 'betterdocs_sanitize_integer'
+	) );
+
+	$wp_customize->add_control( new BetterDocs_Customizer_Range_Value_Control(
+		$wp_customize, 'betterdocs_archive_content_area_width', array(
+		'type'     => 'betterdocs-range-value',
+		'section'  => 'betterdocs_archive_page_settings',
+		'settings' => 'betterdocs_archive_content_area_width',
+		'label'    => esc_html__('Content Area Width', 'betterdocs'),
+		'input_attrs' => array(
+			'min'    => 0,
+			'max'    => 100,
+			'step'   => 1,
+			'suffix' => '%', //optional suffix
+		),
+	) ) );
+
+	// Content Area Max Width
+	$wp_customize->add_setting( 'betterdocs_archive_content_area_max_width', array(
+		'default'       	=> $defaults['betterdocs_archive_content_area_max_width'],
+		'capability'    	=> 'edit_theme_options',
+		'transport' 		=> 'postMessage',
+		'sanitize_callback' => 'betterdocs_sanitize_integer'
+	) );
+
+	$wp_customize->add_control( new BetterDocs_Customizer_Range_Value_Control(
+		$wp_customize, 'betterdocs_archive_content_area_max_width', array(
+		'type'     => 'betterdocs-range-value',
+		'section'  => 'betterdocs_archive_page_settings',
+		'settings' => 'betterdocs_archive_content_area_max_width',
+		'label'    => esc_html__('Content Area Maximum Width', 'betterdocs'),
+		'input_attrs' => array(
+			'min'    => 0,
+			'max'    => 3000,
+			'step'   => 1,
+			'suffix' => 'px', //optional suffix
+		),
 	) ) );
 
 	// Archive Content Area

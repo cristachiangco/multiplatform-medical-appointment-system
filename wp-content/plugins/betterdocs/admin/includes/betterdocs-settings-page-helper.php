@@ -73,12 +73,12 @@ function betterdocs_settings_args(){
             )
         ),
         'internal_kb_section' =>  array(
-            'title' => __('Internal Knowledge Base', 'betterdocs-pro'),
+            'title' => __('Internal Knowledge Base', 'betterdocs'),
             'priority'    => 1,
             'fields' => apply_filters( 'betterdocs_internal_kb_fields', array(
                 'content_restriction_title' => array(
                     'type'        => 'title',
-                    'label'       => __('Internal Knowledge Base', 'betterdocs-pro'),
+                    'label'       => __('Internal Knowledge Base', 'betterdocs'),
                     'disable'     => true,
                     'priority'    => 0,
                 ),
@@ -86,7 +86,7 @@ function betterdocs_settings_args(){
                     'type'      => 'checkbox',
                     'disable'    => true,
                     'priority'  => 1,
-                    'label'     => __( 'Enable/Disable', 'betterdocs-pro' ),
+                    'label'     => __( 'Enable/Disable', 'betterdocs' ),
                     'default'   => '',
                     'dependency' => array(
                         1 => array(
@@ -96,8 +96,8 @@ function betterdocs_settings_args(){
                 ),
                 'content_visibility' => array(
                     'type'        => 'select',
-                    'label'       => __('Restrict Access to', 'betterdocs-pro'),
-                    'help'        => __('<strong>Note:</strong> Only selected User Roles will be able to view your Knowledge Base' , 'betterdocs-pro'),
+                    'label'       => __('Restrict Access to', 'betterdocs'),
+                    'help'        => __('<strong>Note:</strong> Only selected User Roles will be able to view your Knowledge Base' , 'betterdocs'),
                     'disable'     => true,
                     'priority'    => 2,
                     'multiple'    => true,
@@ -106,8 +106,8 @@ function betterdocs_settings_args(){
                 ),
                 'restrict_template' => array(
                     'type'        => 'select',
-                    'label'       => __('Restriction on Docs', 'betterdocs-pro'),
-                    'help'        => __('<strong>Note:</strong> Selected Docs pages will be restricted' , 'betterdocs-pro'),
+                    'label'       => __('Restriction on Docs', 'betterdocs'),
+                    'help'        => __('<strong>Note:</strong> Selected Docs pages will be restricted' , 'betterdocs'),
                     'disable'     => true,
                     'priority'    => 3,
                     'multiple'    => true,
@@ -116,8 +116,8 @@ function betterdocs_settings_args(){
                 ),
                 'restrict_category' => array(
                     'type'        => 'select',
-                    'label'       => __('Restriction on Docs Categories', 'betterdocs-pro'),
-                    'help'        => __('<strong>Note:</strong> Selected Docs categories will be restricted ' , 'betterdocs-pro'),
+                    'label'       => __('Restriction on Docs Categories', 'betterdocs'),
+                    'help'        => __('<strong>Note:</strong> Selected Docs categories will be restricted ' , 'betterdocs'),
                     'disable'     => true,
                     'priority'    => 5,
                     'multiple'    => true,
@@ -126,8 +126,8 @@ function betterdocs_settings_args(){
                 ),
                 'restricted_redirect_url' => array(
                     'type'        => 'text',
-                    'label'       => __('Redirect URL' , 'betterdocs-pro'),
-                    'help'        => __('<strong>Note:</strong> Set a custom URL to redirect users without permissions when they try to access internal knowledge base. By default, restricted content will redirect to the "404 not found" page' , 'betterdocs-pro'),
+                    'label'       => __('Redirect URL' , 'betterdocs'),
+                    'help'        => __('<strong>Note:</strong> Set a custom URL to redirect users without permissions when they try to access internal knowledge base. By default, restricted content will redirect to the "404 not found" page' , 'betterdocs'),
                     'default'     => '',
                     'placeholder' => 'https://',
                     'disable'     => true,
@@ -268,9 +268,9 @@ function betterdocs_settings_args(){
                                 ),
                                 'search_button_text' => apply_filters('betterdocs_search_button_text',array(
                                     'type'     => 'text',
-                                    'label'    => __('Search Button Text', 'betterdocs-pro'),
+                                    'label'    => __('Search Button Text', 'betterdocs'),
                                     'priority' => 10,
-                                    'default'  => esc_html__('Search','betterdocs-pro'),
+                                    'default'  => esc_html__('Search','betterdocs'),
                                     'disable'  => true
                                 )),
                                 'search_not_found_text' => array(
@@ -334,8 +334,8 @@ function betterdocs_settings_args(){
                                 'alphabetically_order_post' => array(
                                     'type'        => 'select',
                                     'label'       => __('Docs Order By' , 'betterdocs'),
-                                    'default'     =>  apply_filters('betterdocs_post_order_default', 'none'),
-                                    'options'     =>  apply_filters('betterdocs_post_order_options', array(
+                                    'default'     => 'betterdocs_order',
+                                    'options'     => array(
                                         'none'      => __('No order', 'betterdocs'),
                                         'ID'        => __('Post ID', 'betterdocs'),
                                         'author'    => __('Post Author', 'betterdocs'),
@@ -345,8 +345,9 @@ function betterdocs_settings_args(){
                                         'parent'    => __('Parent Id', 'betterdocs'),
                                         'rand'      => __('Random', 'betterdocs'),
                                         'comment_count' => __('Comment Count', 'betterdocs'),
-                                        'menu_order'    => __('Menu Order', 'betterdocs')
-                                    )),
+                                        'menu_order' => __('Menu Order', 'betterdocs'),
+                                        'betterdocs_order' => __('BetterDocs Order', 'betterdocs')
+                                    ),
                                     'priority'    => 10,
                                 ),
                                 'docs_order' => array(
@@ -371,12 +372,12 @@ function betterdocs_settings_args(){
                                     'default'   => 3,
                                     'priority'	=> 10
                                 ),
-                                'posts_number' => array(
+                                'posts_number' => apply_filters('betterdocs_posts_number',array(
                                     'type'      => 'number',
                                     'label'     => __('Number of Posts' , 'betterdocs'),
                                     'default'   => 10,
                                     'priority'	=> 10
-                                ),
+                                )),
                                 'post_count' => array(
                                     'type'        => 'checkbox',
                                     'label'       => __('Enable Post Count' , 'betterdocs'),
@@ -435,7 +436,7 @@ function betterdocs_settings_args(){
                                     'priority'	=> 10,
                                     'dependency'  => array(
                                         1 => array(
-                                            'fields' => array( 'toc_title', 'enable_sticky_toc', 'toc_hierarchy', 'supported_heading_tag', 'toc_list_number' )
+                                            'fields' => array( 'toc_title', 'enable_sticky_toc', 'toc_hierarchy', 'supported_heading_tag', 'toc_list_number', 'title_link_ctc', 'toc_dynamic_title', 'collapsible_toc_mobile' )
                                         )
                                     ),
                                     'hide'  => array(
